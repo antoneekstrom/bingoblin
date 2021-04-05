@@ -5,7 +5,12 @@
 export type EmitterListener<T> = (...args: T[]) => void
 
 /**
- * Copies some methods from Socket.io definitions, because they are wack
+ * 
+ */
+export type EmitterListenerAny<T, E> = (e: E, ...args: T[]) => void
+
+/**
+ * 
  */
 export interface Emitter<M> {
 
@@ -15,32 +20,56 @@ export interface Emitter<M> {
    readonly id: string
 
    /**
-    * Adds a listener for a particular event. Calling multiple times will add
-    * multiple listeners
-    * @param event The event that we're listening for
-    * @param fn The function to call when we get the event. Parameters depend on the
-    * event in question
-    * @return This Emitter
+    * 
+    * @param event 
+    * @param fn 
     */
-   on<E extends keyof M & string>(event: E, fn: EmitterListener<M[E]>): Emitter<M>
+   on<E extends keyof M & string>(event: E, fn: EmitterListener<M[E]>): void
 
    /**
-    * Adds a listener for a particular event that will be invoked
-    * a single time before being automatically removed
-    * @param event The event that we're listening for
-    * @param fn The function to call when we get the event. Parameters depend on
-    * the event in question
-    * @return This Emitter
+    * 
+    * @param event 
+    * @param fn 
     */
-   once<E extends keyof M & string>(event: E, fn: EmitterListener<M[E]>): Emitter<M>
+   once<E extends keyof M & string>(event: E, fn: EmitterListener<M[E]>): void
+
+   /**
+    * 
+    * @param event 
+    * @param fn 
+    */
+   off<E extends keyof M & string>(event: E, fn: EmitterListener<M[E]>): void
  
    /**
-    * Emits 'event' with the given args
-    * @param event The event that we want to emit
-    * @param args Optional arguments to emit with the event
-    * @return This Emitter
+    * 
+    * @param event 
+    * @param data 
     */
-   emit<E extends keyof M & string>(event: E, data?: M[E]): any
+   emit<E extends keyof M & string>(event: E, data?: M[E]): void
+
+   /**
+    * 
+    * @param fn 
+    */
+   onAny<E extends keyof M & string>(fn: EmitterListenerAny<M[E], E>): void
+
+   /**
+    * 
+    * @param fn 
+    */
+   offAny<E extends keyof M & string>(fn: EmitterListenerAny<M[E], E>): void
+
+   /**
+    * 
+    * @param id 
+    */
+   join(id: string): void
+
+   /**
+    * 
+    * @param id 
+    */
+   leave(id: string): void
 
 }
 

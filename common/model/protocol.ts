@@ -23,6 +23,20 @@ export type BingoEventMap = {
 }
 
 /**
+ * 
+ */
+export type BingoClientEvent = keyof Pick<BingoEventMap, 'get-state' | 'request-state-update' | 'register-user'>
+
+/**
+ * 
+ */
+export type BingoClientEventInfo<E extends BingoClientEvent> = {
+   e: E
+   data: BingoEventData<E>
+   client: BingoClient
+}
+
+/**
  * Protocol through which the frontend communicates with the bingo backend.
  */
 export interface BingoFrontend {
@@ -57,6 +71,27 @@ export interface BingoFrontend {
  * Protocol through which the backend communicates with the bingo frontend.
  */
 export interface BingoBackend {
-   updateState(state: BingoState): void
-   getState(): BingoState
+   broadcast<E extends BingoEvent>(bingoCode: string | undefined, e: E, data: BingoEventData<E>): void
+   connect(client: BingoClient): () => void
+   onDisconnect(fn: (client: BingoClient) => void): () => void
+   onConnect(fn: (client: BingoClient) => void): () => void
+   observeClientEvent<E extends BingoClientEvent>(e: E): Observable<BingoClientEventInfo<E>>
+}
+
+/**
+ * 
+ */
+export interface BingoClient {
+   getBingoCode(): string | undefined
+   setBingoCode(code: string): void
+   getClientId(): string
+   send<E extends BingoEvent>(e: E, data: BingoEventData<E>): void
+   observe(): Observable<BingoClientEventInfo<BingoClientEvent>>
+}
+
+/**
+ * 
+ */
+export interface BingoInstance {
+
 }

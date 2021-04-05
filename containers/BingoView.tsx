@@ -4,14 +4,14 @@ import BingoModel from '../common/BingoModel'
 import { useRouter } from 'next/dist/client/router'
 import BingoCard from '../components/BingoCard'
 import PageDropzone from '../components/PageDropzone'
-import { Header } from '../components/style/typography'
+import { Header, Label } from '../components/style/typography'
 import { BingoPage, SettingsLayout, Sidebar } from '../components/style/page'
 import BingoPalette from '../components/BingoPalette'
 import StatefulTextField from '../components/StatefulTextField'
 
 export default function BingoView() {
    const router = useRouter()
-   const bingoId = (router.query as any).id
+   const bingoId = (router.query as any).id ?? 'bongo'
    const [bingo, state, socket] = useBingo(bingoId)
    const [isCardHidden, setIsCardHidden] = useState(true)
    const toggleCardHidden = () => setIsCardHidden(state => !state)
@@ -37,6 +37,9 @@ export default function BingoView() {
                }}
             />
             <BingoPalette disabled={!isCardHidden} onSetColor={setColor} selected={self?.color} />
+            {state?.players.map(p => (
+               <Label style={{color: p.color}} key={p.id}>{p.name}</Label>
+            ))}
          </SettingsLayout>
          <Sidebar />
          {state && (

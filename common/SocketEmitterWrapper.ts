@@ -1,8 +1,8 @@
-import { Socket as ClientSocket } from "socket.io-client";
+//import { Socket as ClientSocket } from "socket.io-client";
 import { Socket as ServerSocket } from "socket.io";
-import { Emitter, EmitterListener, EmitterWrapper } from "./Emitter";
+import { EmitterListener, EmitterListenerAny, EmitterWrapper } from "./emitter";
 
-export default class ConcreteEmitterWrapper<M, S extends typeof ClientSocket | ServerSocket> implements EmitterWrapper<M, S> {
+export default class SocketEmitterWrapper<M, S extends ServerSocket> implements EmitterWrapper<M, S> {
 
    constructor(private socket: S) {}
 
@@ -14,18 +14,36 @@ export default class ConcreteEmitterWrapper<M, S extends typeof ClientSocket | S
       return this.socket
    }
 
-   on<E extends keyof M & string>(event: E, fn: EmitterListener<M[E]>): Emitter<M> {
-      this.socket.on(event, fn as any)
-      return this
+   join(id: string): void {
+      this.inner().join(id)
    }
 
-   once<E extends keyof M & string>(event: E, fn: EmitterListener<M[E]>): Emitter<M> {
-      this.socket.once(event, fn as any)
-      return this
+   leave(id: string): void {
+      this.inner().leave(id)
+   }
+
+   on<E extends keyof M & string>(event: E, fn: EmitterListener<M[E]>) {
+      this.inner().on(event, fn as any)
+   }
+
+   once<E extends keyof M & string>(event: E, fn: EmitterListener<M[E]>) {
+      this.inner().once(event, fn as any)
+   }
+
+   off<E extends keyof M & string>(event: E, fn: EmitterListener<M[E]>) {
+      this.inner().off(event, fn)
    }
 
    emit<E extends keyof M & string>(event: E, data?: M[E]) {
-      this.socket.emit(event, data)
+      this.inner().emit(event, data)
+   }
+
+   onAny<E extends keyof M & string>(fn: EmitterListenerAny<M[E], E>) {
+      this.inner().onAny(fn)
+   }
+
+   offAny<E extends keyof M & string>(fn: EmitterListenerAny<M[E], E>) {
+      this.inner().offAny(fn)
    }
 
 }

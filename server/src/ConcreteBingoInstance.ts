@@ -1,16 +1,6 @@
-import { Server } from "socket.io";
-import { Socket } from "socket.io";
-import { Bingo, BingoState } from "../../common/model/bingo";
-import { BingoBackend, BingoEvent, BingoEventData, BingoEventMap } from "../../common/model/protocol";
-import { EmitterListener, EmitterWrapper } from "../../common/Emitter";
-import BackendBingoModel from "./BackendBingoModel";
+import { BingoInstance } from "../../common/model/protocol";
 
-const DEFAULT_ID = 'default'
-
-export type BingoEmitter = EmitterWrapper<BingoEventMap, Socket>
-
-export default class ConcreteBingoBackend implements BingoBackend {
-
+export default class ConcreteBingoInstance implements BingoInstance {
    constructor(private server: Server, private bingo: Bingo, private id = DEFAULT_ID) {}
 
    connect(socket: BingoEmitter) {
@@ -61,5 +51,4 @@ export default class ConcreteBingoBackend implements BingoBackend {
    protected listen<E extends BingoEvent>(socket: BingoEmitter, e: E, fn: EmitterListener<BingoEventData<E>>) {
       socket.on(e, (args: any) => fn(args))
    }
-
 }

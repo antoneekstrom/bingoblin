@@ -1,42 +1,46 @@
-import { Server, Socket } from 'socket.io'
+import { Server } from 'socket.io'
 import { createServer } from 'http'
-import BingoStorage from './BingoStorage'
+import BingoBackendFactory from './BingoBackendFactory'
 import BackendBingoModel from './BackendBingoModel'
 import BingoPlayerFactory from './BingoPlayerFactory'
-import BingoModel from '../../common/BingoModel'
-import SocketEmitterWrapper from '../../common/SocketEmitterWrapper'
-import { BingoEventMap } from '../../common/model/protocol'
-import ConcreteBingoBackend from './ConcreteBingoBackend'
 
 start(25565)
 
 function start(port: number) {
    const io = init(port)
-   const bb = new BingoStorage(id => new ConcreteBingoBackend(io, new BingoModel(), id))
+   const backend = BingoBackendFactory.create(io)
+   const model = new BackendBingoModel({size: 3, items: []})
 
-   io.on('connection', socket => {
-      const bs = new SocketEmitterWrapper<BingoEventMap, Socket>(socket)
+   const onRegisterUser = backend.observeClientEvent('register-user')
+   const onGetState = backend.observeClientEvent('get-state')
+   const onRequestStateUpdate = backend.observeClientEvent('request-state-update')
 
-      bs.on('register-user', ({name, bingoId}) => {
-         const backend = bb.getById(bingoId)
-         backend.connect(bs)
+   const update = (bingoId: string) => backend.broadcast(bingoId, 'update-state', model.getState())
 
-         const model = BackendBingoModel.from(backend.getState())
-         let user = model.findPlayerById(bs.id)
-         if (!user) {
-            user = model.assignRole(BingoPlayerFactory.create(name, socket.id))
-            model.addPlayer(user)
-         }
-         else {
-            model.modifyPlayer(bs.id, prev => ({...prev, name}))
-         }
-
-         backend.updateState(model.getState())
-         bs.emit('register-user-response', user)
-      })
+   onRegisterUser.subscribe(({ client, data: { bingoId, name } }) => {
+      model.addPlayer(model.assignRole(BingoPlayerFactory.create(name, client.getClientId())))
+      client.setBingoCode(bingoId)
+      update(bingoId)
    })
 
-   // [...Array(25)].map(() => `bingo${arrays.range(Math.floor(Math.random() * 3)).map(() => 'o').join('')}`).map((name, index) => ({name, index}))
+   onGetState.subscribe(({ client }) => {
+      client.send('update-state', model.getState())
+   })
+
+   onRequestStateUpdate.subscribe(({ data, client }) => {
+      const bingoCode = client.getBingoCode()
+      if (bingoCode) {
+         model.setState(data)
+         update(bingoCode)
+      }
+   })
+
+   backend.onDisconnect(client => {
+      const player = model.findPlayerById(client.getClientId())
+      if (player)
+         model.removePlayer(player)
+      backend.broadcast(client.getBingoCode(), 'update-state', model.getState())
+   })
 
    console.log(`starting bingo server on port ${port}`)
 }
