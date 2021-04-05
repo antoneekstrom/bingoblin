@@ -24,7 +24,6 @@ export default function useBingo(bingoId: string): UseBingoReturn {
          setBingo(bingo)
    
          bingo.observeState().subscribe(updateState)
-         bingo.register('bingomannen2', bingoId)
       }
    }, [bingoId, socket])
 

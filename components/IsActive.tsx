@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react'
+import React, { FC, PropsWithChildren } from 'react'
 import styled from 'styled-components'
 
 export type IsActiveProps = PropsWithChildren<{
@@ -9,7 +9,7 @@ export type IsActiveStyle = {
    active: boolean
 }
 
-const Element = styled.div<IsActiveStyle>`
+export const IsActive = styled.div<IsActiveStyle>`
    border: solid 2px;
 
    border-color: ${props => props.active ? 'black' : 'transparent'};
@@ -19,6 +19,7 @@ const Element = styled.div<IsActiveStyle>`
    box-sizing: border-box;
 `
 
-export default function IsActive({children, active}: IsActiveProps) {
-   return <Element active={active ?? true}>{children}</Element>
+export default function IsActiveWrap({children, active}: IsActiveProps) {
+
+   return <IsActive active={active ?? true}>{children}</IsActive>
 }

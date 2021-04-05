@@ -1,19 +1,32 @@
 import React from 'react'
-import ColorPalette from './ColorPalette'
-import ColorSwatch from './ColorSwatch'
-import IsActive from './IsActive'
+import { ColorPaletteLayout, ColorSwatch } from './style/palette'
 
 export type BingoPaletteProps = {
    onSetColor?: (color: string) => void
-   color?: string
+   selected?: string
+   disabled?: boolean
 }
+
+export const BINGO_PALETTE_COLORS = [
+   '#FFB800',
+   '#34B460',
+   '#FF7A00',
+   '#FF2E00',
+   '#FF00A8',
+]
 
 export default function BingoPalette(props: BingoPaletteProps) {
    return (
-      <ColorPalette>
-         {['red', 'yellow', 'green', 'blue', 'pink'].map(c => (
-            <IsActive key={c} active={props.color == c}><ColorSwatch color={c} onClick={props.onSetColor}/></IsActive>
+      <ColorPaletteLayout>
+         {BINGO_PALETTE_COLORS.map((c) => (
+            <ColorSwatch
+               disabled={props.disabled}
+               key={c}
+               color={c}
+               selected={props.selected == c}
+               onClick={() => props.onSetColor?.(c)}
+            />
          ))}
-      </ColorPalette>
+      </ColorPaletteLayout>
    )
 }

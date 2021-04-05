@@ -1,102 +1,69 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
-import { BingoCell } from "../common/model/bingo"
-import BingoGrid from "../components/BingoGrid"
-import { BingoGridCellFactory } from '../components/BingoGridCell'
 import useBingo from '../hooks/useBingo'
 import BingoModel from '../common/BingoModel'
-import BingoPalette from '../components/BingoPalette'
-import BingoPlayerList from '../components/BingoPlayerList'
-import PageDropzone from '../components/PageDropzone'
 import { useRouter } from 'next/dist/client/router'
-
-export type BingoViewStyle = unknown
-
-const View = styled.div`
-   width: 100vw;
-   height: 100vh;
-   overflow: hidden;
-
-   display: grid;
-   place-items: center;
-   grid-template-columns: 1fr auto 1fr;
-`
-
-const BingoContainer = styled.div`
-   width: 90vmin;
-   height: 90vmin;
-`
-
-const Sidebar = styled.div`
-   width: 100%;
-   height: 100%;
-   display: grid;
-   place-items: center;
-`
+import BingoCard from '../components/BingoCard'
+import PageDropzone from '../components/PageDropzone'
+import { Header } from '../components/style/typography'
+import { BingoPage, SettingsLayout, Sidebar } from '../components/style/page'
+import BingoPalette from '../components/BingoPalette'
+import StatefulTextField from '../components/StatefulTextField'
 
 export default function BingoView() {
-   const [name, setName] = useState('bingomannen123')
-   const bingoId = (useRouter().query as any).id
+   const router = useRouter()
+   const bingoId = (router.query as any).id
    const [bingo, state, socket] = useBingo(bingoId)
+   const [isCardHidden, setIsCardHidden] = useState(true)
+   const toggleCardHidden = () => setIsCardHidden(state => !state)
 
    if (!socket) {
       return <h1>error connecting to websocket</h1>
    }
 
-   if (!state) {
-      return <h1>loading..</h1>
-   }
-
-   const self = BingoModel.from(state).findPlayerById(socket?.inner().id)
+   const self =
+      state && BingoModel.from(state).findPlayerById(socket?.inner().id)
 
    return (
-      <View onDrop={console.log} onDragOver={e => e.preventDefault()}>
-         <Sidebar>
-            <div>
-               <p>bingoId: {bingoId}</p>
-               <form onSubmit={e => {
-                  e.preventDefault()
+      <BingoPage onDragOver={(e) => e.preventDefault()}>
+         <Sidebar />
+         <SettingsLayout>
+            <Header>Me</Header>
+            <StatefulTextField
+               disabled={!isCardHidden}
+               label="Name"
+               initialValue={self?.name}
+               onValue={(name) => {
                   bingo?.register(name, bingoId)
-               }}>
-                  <label>Name:</label>
-                  <input type="text" onChange={e => setName(e.target.value)} value={name} />
-                  <input type="submit" value="set" />
-               </form>
-               {self && <BingoPalette color={self?.color} onSetColor={setColor}/>}
-               <BingoPlayerList players={state.players} />
-            </div>
-         </Sidebar>
-
-         <BingoContainer>
-            <BingoGrid {...state.board} cell={!self ? BingoGridCellFactory.unavailable() : BingoGridCellFactory.base(c => setCell(c))} />
-         </BingoContainer>
+               }}
+            />
+            <BingoPalette disabled={!isCardHidden} onSetColor={setColor} selected={self?.color} />
+         </SettingsLayout>
+         <Sidebar />
+         {state && (
+            <BingoCard
+               board={state.board}
+               hidden={isCardHidden}
+               onClick={toggleCardHidden}
+               onClickTitle={toggleCardHidden}
+            />
+         )}
 
          <PageDropzone onDrop={onDrop} />
-
-         <Sidebar>
-         </Sidebar>
-      </View>
+      </BingoPage>
    )
-
-   function setCell(cell: BingoCell) {
-      if (self && state) {
-         console.log("setCell", {color: self.color, cell})
-         bingo?.requestStateUpdate(BingoModel.from(state).toggleCell(cell.index, self.color).getState())
-      }
-      else {
-         console.error("setCell - self or state is undefined")
-      }
-   }
 
    function setColor(color: string) {
       if (self && state) {
-         bingo?.requestStateUpdate(BingoModel.from(state).modifyPlayer(self.id, (prev) => {
-            prev.color = color
-            return prev
-         }).getState())
-      }
-      else {
-         console.error("setColor - self or state is undefined")
+         bingo?.requestStateUpdate(
+            BingoModel.from(state)
+               .modifyPlayer(self.id, (prev) => {
+                  prev.color = color
+                  return prev
+               })
+               .getState()
+         )
+      } else {
+         console.error('setColor - self or state is undefined')
       }
    }
 
@@ -104,7 +71,9 @@ export default function BingoView() {
       const f = e.dataTransfer.files?.[0]
       if (state && f) {
          const t = await f.text()
-         bingo?.requestStateUpdate(BingoModel.from(state).setCellNames(t.split('\n')).getState())
+         bingo?.requestStateUpdate(
+            BingoModel.from(state).setCellNames(t.split('\n')).getState()
+         )
       }
    }
 }

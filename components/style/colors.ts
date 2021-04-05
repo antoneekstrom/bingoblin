@@ -1,0 +1,11 @@
+
+const colors = {
+   PRIMARY: '#453BC9',
+   PRIMARY_DARKENED: '#3D34B4',
+   PRIMARY_DISABLED: '#564CD7',
+   SECONDARY: '#FFFFFF',
+   SECONDARY_DARKENED: '#ECEBFA',
+   SECONDARY_DISABLED: 'rgba(255,255,255,0.3)'
+}
+
+export default colors
