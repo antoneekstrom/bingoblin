@@ -1,9 +1,4 @@
-import { shuffle } from "./arrays";
-import { Bingo, BingoBoard, BingoCell, BingoPlayer, BingoState } from "./model/bingo";
-
-const NO_COLOR = undefined
-
-export { BingoModel }
+import { Bingo, BingoBoard, BingoPlayer, BingoState } from "./model/bingo";
 
 export default class BingoModel implements Bingo {
 
@@ -27,40 +22,6 @@ export default class BingoModel implements Bingo {
 
    setSize(size: number) {
       this.board.size = size
-      return this
-   }
-
-   setCellNames(names: string[]) {
-      this.board.items = this.board.items.map((item, i) => ({...item, name: names?.[i]}))
-      return this
-   }
-
-   shuffle() {
-      this.board.items = shuffle(this.board.items)
-      return this
-   }
-
-   isCellEmpty(cell: BingoCell): boolean {
-      return !cell?.color
-   }
-
-   toggleCell(index: number, color: BingoCell['color']) {
-      const cell = this.board.items[index]
-
-      console.log("toggleCell", {index, color})
-
-      if (this.isCellEmpty(cell)) {
-         this.setCell(index, {...cell, color: color})
-      }
-      else if (cell.color == color) {
-         this.setCell(index, {...cell, color: NO_COLOR})
-      }
-
-      return this
-   }
-
-   setCell(index: number, state: BingoCell) {
-      this.board.items[index] = state
       return this
    }
 

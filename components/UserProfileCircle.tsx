@@ -1,18 +1,16 @@
 import React from 'react'
-import styled from 'styled-components'
+import { Label } from './style/typography'
 
 export type UserProfileCircleProps = {
    name?: string
    pictureUrl?: string
+   color?: string
 }
 
 export type UserProfileCircleStyle = unknown
 
-const Element = styled.div`
-`
-
-export default function UserProfileCircle(props: UserProfileCircleProps) {
+export default function UserProfileCircle({ name, color }: UserProfileCircleProps) {
    return (
-      <Element>{props.name}</Element>
+      <Label style={{color}}>{name}</Label>
    )
 }

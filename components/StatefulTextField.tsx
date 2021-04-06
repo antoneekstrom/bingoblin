@@ -6,6 +6,7 @@ type InnerProps = Pick<TextFieldProps, 'onClick' | 'value' | 'onChange' | 'label
 export type StatefulTextFieldProps = InnerProps & {
    onValue?: (value: string) => void | string
    initialValue?: string
+   blur?: boolean
 }
 
 export default function StatefulTextField(props: StatefulTextFieldProps) {
@@ -21,9 +22,17 @@ export default function StatefulTextField(props: StatefulTextFieldProps) {
 
    return (
       <form onSubmit={onSubmit}>
-         <TextField {...inner} />
+         <TextField onBlur={onBlur} {...inner} />
       </form>
    )
+
+   function onBlur(e: React.FocusEvent) {
+      if (props.blur) {
+         const replace = props.onValue?.(value)
+         if (replace)
+            setValue(replace)
+      }
+   }
 
    function onSubmit(e: React.FormEvent<HTMLFormElement>) {
       e.preventDefault()

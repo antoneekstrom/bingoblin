@@ -2,72 +2,49 @@ import React, { useState } from 'react'
 import useBingo from '../hooks/useBingo'
 import BingoModel from '../common/BingoModel'
 import { useRouter } from 'next/dist/client/router'
-import BingoCard from '../components/BingoCard'
+import { ConnectedBingoCard } from '../components/BingoCard'
 import PageDropzone from '../components/PageDropzone'
-import { Header, Label } from '../components/style/typography'
-import { BingoPage, SettingsLayout, Sidebar } from '../components/style/page'
-import BingoPalette from '../components/BingoPalette'
-import StatefulTextField from '../components/StatefulTextField'
+import { BingoPage, Sidebar } from '../components/style/page'
+import FrontendBingoModel from '../client/FrontendBingoModel'
+import { ConnectedBingoMenu } from '../components/BingoMenu'
+import { BingoContext, BingoContextProvider } from '../hooks/useBingoContext'
 
 export default function BingoView() {
-   const router = useRouter()
-   const bingoId = (router.query as any).id ?? 'bongo'
-   const [bingo, state, socket] = useBingo(bingoId)
+   const [bingoCode, setBingoCode] = useBingoCode('bongo')
+   const [bingo, state, socket] = useBingo(bingoCode)
+
    const [isCardHidden, setIsCardHidden] = useState(true)
-   const toggleCardHidden = () => setIsCardHidden(state => !state)
 
    if (!socket) {
-      return <h1>error connecting to websocket</h1>
+      return <SocketErrorView />
    }
 
-   const self =
-      state && BingoModel.from(state).findPlayerById(socket?.inner().id)
+   const self = state && BingoModel.from(state).findPlayerById(socket?.id)
+   const bingoContext: BingoContext = {
+      bingo,
+      state,
+      self,
+      bingoCodeState: [bingoCode, setBingoCode],
+      isCardHiddenState: [isCardHidden, setIsCardHidden]
+   }
 
    return (
-      <BingoPage onDragOver={(e) => e.preventDefault()}>
-         <Sidebar />
-         <SettingsLayout>
-            <Header>Me</Header>
-            <StatefulTextField
-               disabled={!isCardHidden}
-               label="Name"
-               initialValue={self?.name}
-               onValue={(name) => {
-                  bingo?.register(name, bingoId)
-               }}
-            />
-            <BingoPalette disabled={!isCardHidden} onSetColor={setColor} selected={self?.color} />
-            {state?.players.map(p => (
-               <Label style={{color: p.color}} key={p.id}>{p.name}</Label>
-            ))}
-         </SettingsLayout>
-         <Sidebar />
-         {state && (
-            <BingoCard
-               board={state.board}
-               hidden={isCardHidden}
-               onClick={toggleCardHidden}
-               onClickTitle={toggleCardHidden}
-            />
-         )}
-
-         <PageDropzone onDrop={onDrop} />
-      </BingoPage>
+      <BingoContextProvider value={bingoContext}>
+         <BingoPage
+            onDragOver={(e) => e.preventDefault()}
+            onWheel={(e) => setIsCardHidden(e.deltaY > 0)}
+         >
+            <Sidebar />
+            <ConnectedBingoMenu />
+            <Sidebar />
+            <ConnectedBingoCard />
+            <PageDropzone onDrop={onDrop} />
+         </BingoPage>
+      </BingoContextProvider>
    )
 
-   function setColor(color: string) {
-      if (self && state) {
-         bingo?.requestStateUpdate(
-            BingoModel.from(state)
-               .modifyPlayer(self.id, (prev) => {
-                  prev.color = color
-                  return prev
-               })
-               .getState()
-         )
-      } else {
-         console.error('setColor - self or state is undefined')
-      }
+   function SocketErrorView() {
+      return <h1>error connecting to websocket</h1>
    }
 
    async function onDrop(e: React.DragEvent) {
@@ -75,8 +52,15 @@ export default function BingoView() {
       if (state && f) {
          const t = await f.text()
          bingo?.requestStateUpdate(
-            BingoModel.from(state).setCellNames(t.split('\n')).getState()
+            FrontendBingoModel.from(state)
+               .setCellNames(t.split('\n'))
+               .getState()
          )
       }
+   }
+
+   function useBingoCode(initialCode: string) {
+      const query = useRouter().query as { id?: string }
+      return useState<string>(query.id ?? initialCode)
    }
 }

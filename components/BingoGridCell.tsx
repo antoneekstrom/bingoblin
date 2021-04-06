@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { BingoCell } from '../common/model/bingo'
-import { BingoGridCellStyle } from './style/bingocard'
+import { BingoGridCell } from './style/bingocard'
+import colors from './style/colors'
 import { BingoCellText } from './style/typography'
 
 export type BingoGridCellProps = BingoCell & {
@@ -8,18 +9,31 @@ export type BingoGridCellProps = BingoCell & {
 }
 
 export class BingoGridCellFactory {
-   static base(setCell: (cell: BingoCell) => void): FC<BingoGridCellProps> {
-      return props => <BaseBingoGridCell {...props} color={props.color || 'var(--secondary-darkened)'} onClick={setCell} />
+   static base(onClick: (cell: BingoCell) => void): FC<BingoGridCellProps> {
+      return (props) => (
+         <BaseBingoGridCell
+            {...props}
+            color={props.color || colors.SECONDARY_DARKENED}
+            onClick={cell => onClick?.(cell)}
+         />
+      )
    }
    static unavailable(): FC<BingoGridCellProps> {
-      return props => <BaseBingoGridCell {...props} color="var(--secondary-darkened)" />
+      return (props) => (
+         <BaseBingoGridCell {...props} color={colors.SECONDARY_DARKENED} />
+      )
    }
 }
 
-export function BaseBingoGridCell(props: BingoGridCellProps & Required<Pick<BingoCell, 'color'>>) {
+export function BaseBingoGridCell(
+   props: BingoGridCellProps & Required<Pick<BingoCell, 'color'>>
+) {
    return (
-      <BingoGridCellStyle color={props.color} onClick={() => props.onClick?.(props)}>
+      <BingoGridCell
+         color={props.color}
+         onClick={() => props.onClick?.(props)}
+      >
          <BingoCellText>{props.name}</BingoCellText>
-      </BingoGridCellStyle>
+      </BingoGridCell>
    )
 }

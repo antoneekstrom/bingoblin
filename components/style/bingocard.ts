@@ -11,6 +11,7 @@ export type BingoCardStyle = {
 
 export type BingoGridCellStyle = {
    color: string
+   clickable?: boolean
 }
 
 export const BingoCardStyle = styled.div<BingoCardStyle>`
@@ -55,7 +56,7 @@ export const BingoGridLayout = styled.ol<BingoGridStyle>`
    gap: 30px;
 `
 
-export const BingoGridCellStyle = styled.li`
+export const BingoGridCell = styled.li<BingoGridCellStyle>`
    background-color: ${props('color')};
    
    display: grid;
@@ -63,4 +64,6 @@ export const BingoGridCellStyle = styled.li`
    user-select: none;
 
    border-radius: 20px;
+
+   cursor: ${({clickable}) => clickable ? 'pointer' : 'unset'};
 `
