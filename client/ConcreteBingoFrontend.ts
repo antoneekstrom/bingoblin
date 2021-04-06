@@ -1,10 +1,14 @@
-import { BingoState } from "../common/model/bingo";
-import { BingoEvent, BingoEventData, BingoEventMap, BingoFrontend } from "../common/model/protocol";
+import { BingoPlayer, BingoState } from '../common/model/bingo'
+import {
+   BingoEvent,
+   BingoEventData,
+   BingoEventMap,
+   BingoFrontend,
+} from '../common/model/protocol'
 import { Observable } from 'rxjs'
-import { ClientEmitter } from "../common/Emitter";
+import { ClientEmitter } from '../common/Emitter'
 
 export default class ConcreteBingoFrontend implements BingoFrontend {
-
    constructor(private socket: ClientEmitter<BingoEventMap>) {}
 
    requestStateUpdate(state: BingoState): void {
@@ -12,24 +16,27 @@ export default class ConcreteBingoFrontend implements BingoFrontend {
    }
 
    observeState() {
-      return new Observable<BingoState>(observer => {
-         this.socket.on('update-state', state => observer.next(state))
+      return new Observable<BingoState>((observer) => {
+         this.socket.on('update-state', (state) => observer.next(state))
       })
    }
 
-   register(name: string, bingoId: string) {
+   register(name: string, bingoId: string, current?: Partial<BingoPlayer>) {
       const result = this.receive('register-user-response')
-      this.emit('register-user', {name, bingoId})
+      this.emit('register-user', { name, bingoCode: bingoId, current })
       return result
    }
 
-   getState() {
+   getState(bingoCode?: string) {
       const result = this.receive('update-state')
-      this.emit('get-state')
+      this.emit('get-state', bingoCode)
       return result
    }
 
-   protected emit<E extends BingoEvent>(e: BingoEvent, args?: BingoEventData<E>) {
+   protected emit<E extends BingoEvent>(
+      e: BingoEvent,
+      args?: BingoEventData<E>
+   ) {
       this.socket.emit(e, args)
    }
 
@@ -38,5 +45,4 @@ export default class ConcreteBingoFrontend implements BingoFrontend {
          this.socket.once(e, resolve)
       })
    }
-
 }

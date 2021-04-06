@@ -58,7 +58,7 @@ export default function BingoMenu({
             label="Name"
             initialValue={self?.name}
             onValue={(name) => {
-               name && bingo?.register(name, bingoCode)
+               name && bingo?.register(name, bingoCode, self)
             }}
             blur
          />

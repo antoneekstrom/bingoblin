@@ -2,7 +2,7 @@ import { Server } from 'socket.io'
 import { createServer } from 'http'
 import BingoBackendFactory from './BingoBackendFactory'
 import BackendBingoModel from './BackendBingoModel'
-import BingoPlayerFactory from './BingoPlayerFactory'
+import BingoPlayerBuilder from './BingoPlayerBuilder'
 
 start(25565)
 
@@ -15,12 +15,16 @@ function start(port: number) {
    const onGetState = backend.observeClientEvent('get-state')
    const onRequestStateUpdate = backend.observeClientEvent('request-state-update')
 
-   const update = (bingoId: string) => backend.broadcast(bingoId, 'update-state', model.getState())
+   const update = (bingoCode: string) => backend.broadcast(bingoCode, 'update-state', model.getState())
 
-   onRegisterUser.subscribe(({ client, data: { bingoId, name } }) => {
-      model.addPlayer(model.assignRole(BingoPlayerFactory.create(name, client.getClientId())))
-      client.setBingoCode(bingoId)
-      update(bingoId)
+   onRegisterUser.subscribe(({ client, data: { bingoCode, name, current } }) => {
+      const pb = new BingoPlayerBuilder(name, client.getClientId())
+      pb.addMissing(current)
+
+      model.addPlayer(model.assignRole(pb.create()))
+      client.setBingoCode(bingoCode)
+
+      update(bingoCode)
    })
 
    onGetState.subscribe(({ client }) => {

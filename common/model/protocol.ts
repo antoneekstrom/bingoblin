@@ -15,10 +15,10 @@ export type BingoEventData<E extends BingoEvent> = BingoEventMap[E]
  * 
  */
 export type BingoEventMap = {
-   'get-state': never
+   'get-state'?: string
    'update-state': BingoState
    'request-state-update': BingoState
-   'register-user': { name: string, bingoId: string }
+   'register-user': { name: string, bingoCode: string, current?: Partial<BingoPlayer> }
    'register-user-response': BingoPlayer
 }
 
