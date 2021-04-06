@@ -9,7 +9,7 @@ import {
 } from '../../common/model/protocol'
 import { Observable, Subject } from 'rxjs'
 import EmitterBingoClient from './EmitterBingoClient'
-import SocketEmitterWrapper from '../../common/SocketEmitterWrapper'
+import { ServerSocketEmitterWrapper } from '../../common/SocketEmitterWrapper'
 
 export default class SocketIOBingoBackend implements BingoBackend {
    private eventSubject = new Subject<BingoClientEventInfo<BingoClientEvent>>()
@@ -20,7 +20,7 @@ export default class SocketIOBingoBackend implements BingoBackend {
       server.on('connection', (socket) => {
          console.log(`socket connected ${socket.id}`)
 
-         const client = new EmitterBingoClient(new SocketEmitterWrapper(socket))
+         const client = new EmitterBingoClient(new ServerSocketEmitterWrapper(socket))
          const disconnect = this.connect(client)
 
          socket.on('disconnect', () => {

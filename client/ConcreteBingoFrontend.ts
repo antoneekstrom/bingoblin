@@ -1,12 +1,11 @@
 import { BingoState } from "../common/model/bingo";
 import { BingoEvent, BingoEventData, BingoEventMap, BingoFrontend } from "../common/model/protocol";
 import { Observable } from 'rxjs'
-import SocketEmitterWrapper from '../common/SocketEmitterWrapper';
-import { Socket } from "socket.io-client";
+import { ClientEmitter } from "../common/Emitter";
 
 export default class ConcreteBingoFrontend implements BingoFrontend {
 
-   constructor(private socket: SocketEmitterWrapper<BingoEventMap, typeof Socket>) {}
+   constructor(private socket: ClientEmitter<BingoEventMap>) {}
 
    requestStateUpdate(state: BingoState): void {
       this.emit('request-state-update', state)

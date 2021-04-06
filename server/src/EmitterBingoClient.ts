@@ -5,12 +5,12 @@ import {
    BingoEventData,
    BingoEventMap,
 } from '../../common/model/protocol'
-import { Emitter } from '../../common/emitter'
+import { ServerEmitter } from '../../common/Emitter'
 import { fromEventPattern, Observable } from 'rxjs'
 
 export default class EmitterBingoClient implements BingoClient {
    constructor(
-      private emitter: Emitter<BingoEventMap>,
+      private emitter: ServerEmitter<BingoEventMap>,
       private bingoCode?: string
    ) {}
 

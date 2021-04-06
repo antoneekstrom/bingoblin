@@ -50,7 +50,7 @@ export interface BingoFrontend {
     * Fetches the state from the server.
     * @returns Promise with the current state
     */
-   getState(): Promise<BingoState>
+   getState(bingoCode?: string): Promise<BingoState>
 
    /**
     * Creates an object which listens to incoming state changes.
@@ -64,7 +64,7 @@ export interface BingoFrontend {
     * @param bingoId Identifies the bingo game
     * @returns Response from the server with playerdata
     */
-   register(name: string, bingoId: string): Promise<BingoPlayer>
+   register(name: string, bingoId: string, current?: Partial<BingoPlayer>): Promise<BingoPlayer>
 }
 
 /**

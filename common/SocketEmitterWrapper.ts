@@ -1,8 +1,8 @@
-//import { Socket as ClientSocket } from "socket.io-client";
+import { Socket as ClientSocket } from "socket.io-client";
 import { Socket as ServerSocket } from "socket.io";
-import { EmitterListener, EmitterListenerAny, EmitterWrapper } from "./emitter";
+import { ClientEmitterWrapper, EmitterListener, EmitterListenerAny, ServerEmitterWrapper } from "./Emitter";
 
-export default class SocketEmitterWrapper<M, S extends ServerSocket> implements EmitterWrapper<M, S> {
+export class ClientSocketEmitterWrapper<M, S extends typeof ClientSocket | ServerSocket> implements ClientEmitterWrapper<M, S> {
 
    constructor(private socket: S) {}
 
@@ -12,14 +12,6 @@ export default class SocketEmitterWrapper<M, S extends ServerSocket> implements 
 
    inner(): S {
       return this.socket
-   }
-
-   join(id: string): void {
-      this.inner().join(id)
-   }
-
-   leave(id: string): void {
-      this.inner().leave(id)
    }
 
    on<E extends keyof M & string>(event: E, fn: EmitterListener<M[E]>) {
@@ -36,6 +28,22 @@ export default class SocketEmitterWrapper<M, S extends ServerSocket> implements 
 
    emit<E extends keyof M & string>(event: E, data?: M[E]) {
       this.inner().emit(event, data)
+   }
+
+}
+
+export class ServerSocketEmitterWrapper<M, S extends ServerSocket> extends ClientSocketEmitterWrapper<M, S> implements ServerEmitterWrapper<M, S> {
+
+   constructor(socket: S) {
+      super(socket)
+   }
+
+   join(id: string): void {
+      this.inner().join(id)
+   }
+
+   leave(id: string): void {
+      this.inner().leave(id)
    }
 
    onAny<E extends keyof M & string>(fn: EmitterListenerAny<M[E], E>) {
