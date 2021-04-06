@@ -11,26 +11,25 @@ export type UseBingoReturn = [
    socket: typeof Socket | undefined
 ]
 
-export default function useBingo(bingoId: string): UseBingoReturn {
+export default function useBingo(bingoCode: string): UseBingoReturn {
    const [state, setState] = useState<BingoState>()
    const [bingo, setBingo] = useState<BingoFrontend>()
    const socket = useMakeSocket()
 
    useEffect(() => {
-      if (bingoId && socket) {
+      if (bingoCode && socket) {
          const bingo = BingoFrontendFactory.create(socket)
          setBingo(bingo)
          
          const subscription = bingo.observeState().subscribe(updateState)
-         bingo.getState()
+         bingo.getState(bingoCode)
          
-         console.log("useBingo effect")
          return () => {
-            console.log("useBingo cleanup")
+            console.log("cleanup")
             subscription.unsubscribe()
          }
       }
-   }, [bingoId, socket])
+   }, [bingoCode, socket])
 
 
    function updateState(state: BingoState) {

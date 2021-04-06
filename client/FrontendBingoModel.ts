@@ -14,10 +14,6 @@ export default class FrontendBingoModel extends BingoModel {
       const cell = this.board.items[index]
 
       if (this.isCellEmpty(cell)) {
-         console.log(color, cell, cell?.color, index)
-      }
-
-      if (this.isCellEmpty(cell)) {
          this.setCell(index, {...cell, index, color: color})
       }
       else if (cell.color == color) {
