@@ -78,15 +78,10 @@ export default function BingoMenu({
          />
 
          <Label>Players</Label>
-         {state?.players.map((p) => (
+         {state?.players.filter(p => p.state != 'spectating').map((p) => (
             <UserProfileCircle name={p.name} key={p.id} color={p.color} />
          ))}
 
-         {self?.role == 'owner' && (
-            <>
-               <Header>Bingo Settings</Header>
-            </>
-         )}
       </SettingsLayout>
    )
 

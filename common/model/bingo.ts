@@ -24,7 +24,7 @@ export type BingoPlayerRole = 'guest' | 'owner'
  * A bingo participant.
  */
 export type BingoPlayer = {
-   name: string
+   name?: string
    id: string
    color?: string
    state: BingoPlayerState

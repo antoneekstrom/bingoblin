@@ -16,14 +16,29 @@ export default class ConcreteBingoFrontend implements BingoFrontend {
    }
 
    observeState() {
+      const { socket } = this
       return new Observable<BingoState>((observer) => {
-         this.socket.on('update-state', (state) => observer.next(state))
+         function observe(state: BingoState) {
+            observer.next(state)
+         }
+         const unobserve = () => {
+            socket.off('update-state', observe)
+            console.log("UNOBSERVE")
+         }
+         socket.on('update-state', observe)
+         return unobserve
       })
    }
 
-   register(name: string, bingoId: string, current?: Partial<BingoPlayer>) {
+   spectate(bingoCode: string): Promise<BingoPlayer> {
+      const result = this.receive('spectate-response')
+      this.emit('spectate', bingoCode)
+      return result
+   }
+
+   register(name: string, bingoCode: string, current?: Partial<BingoPlayer>) {
       const result = this.receive('register-user-response')
-      this.emit('register-user', { name, bingoCode: bingoId, current })
+      this.emit('register-user', { name, bingoCode: bingoCode, current })
       return result
    }
 

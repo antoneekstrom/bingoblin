@@ -15,9 +15,8 @@ function start(port: number) {
 
    const onRegisterUser = backend.observeClientEvent('register-user')
    const onGetState = backend.observeClientEvent('get-state')
-   const onRequestStateUpdate = backend.observeClientEvent(
-      'request-state-update'
-   )
+   const onRequestStateUpdate = backend.observeClientEvent('request-state-update')
+   const onSpectate = backend.observeClientEvent('spectate')
 
    const update = (bingoCode: string, model: BingoModel) =>
       backend.broadcast(
@@ -30,16 +29,32 @@ function start(port: number) {
       ({ client, data: { bingoCode, name, current } }) => {
          if (bingoCode) {
             const model = BackendBingoModel.from(storage.getById(bingoCode))
-            const pb = new BingoPlayerBuilder(name, client.getClientId())
-            pb.addMissing(current)
+            const pb = new BingoPlayerBuilder(name, client.getClientId()).addMissing(current)
+            const player = model.assignRole(pb.create())
 
-            model.addPlayer(model.assignRole(pb.create()))
+            model.addPlayer(player)
             client.setBingoCode(bingoCode)
+            
+            client.send('register-user-response', player)
 
             update(bingoCode, model)
          }
       }
    )
+
+   onSpectate.subscribe(({ client, data: bingoCode }) => {
+      if (bingoCode) {
+         const model = BackendBingoModel.from(storage.getById(bingoCode))
+         const player = model.assignRole(BingoPlayerBuilder.spectator(client.getClientId()))
+
+         model.addPlayer(player)
+         client.setBingoCode(bingoCode)
+
+         client.send('spectate-response', player)
+
+         update(bingoCode, model)
+      }
+   })
 
    onGetState.subscribe(({ client, data: bingoCode }) => {
       if (bingoCode) {
@@ -71,6 +86,8 @@ function start(port: number) {
             model.removePlayer(player)
             update(bingoCode, model)
          }
+
+         client.setBingoCode(undefined)
       }
    })
 

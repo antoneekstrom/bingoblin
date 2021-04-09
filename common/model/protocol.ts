@@ -20,12 +20,14 @@ export type BingoEventMap = {
    'request-state-update': BingoState
    'register-user': { name: string, bingoCode: string, current?: Partial<BingoPlayer> }
    'register-user-response': BingoPlayer
+   'spectate': string,
+   'spectate-response': BingoPlayer
 }
 
 /**
  * 
  */
-export type BingoClientEvent = keyof Pick<BingoEventMap, 'get-state' | 'request-state-update' | 'register-user'>
+export type BingoClientEvent = keyof Pick<BingoEventMap, 'get-state' | 'request-state-update' | 'register-user' | 'spectate'>
 
 /**
  * 
@@ -61,10 +63,16 @@ export interface BingoFrontend {
    /**
     * Registers the user as a player in the bingo.
     * @param name Name of the player
-    * @param bingoId Identifies the bingo game
+    * @param bingoCode Identifies the bingo game
     * @returns Response from the server with playerdata
     */
-   register(name: string, bingoId: string, current?: Partial<BingoPlayer>): Promise<BingoPlayer>
+   register(name: string, bingoCode: string, current?: Partial<BingoPlayer>): Promise<BingoPlayer>
+
+   /**
+    * Spectates the bingo game.
+    * @param bingoCode
+    */
+   spectate(bingoCode: string): Promise<BingoPlayer>
 }
 
 /**
@@ -83,7 +91,7 @@ export interface BingoBackend {
  */
 export interface BingoClient {
    getBingoCode(): string | undefined
-   setBingoCode(code: string): void
+   setBingoCode(code?: string): void
    getClientId(): string
    send<E extends BingoEvent>(e: E, data: BingoEventData<E>): void
    observe(): Observable<BingoClientEventInfo<BingoClientEvent>>

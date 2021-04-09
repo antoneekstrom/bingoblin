@@ -26,12 +26,12 @@ export default class EmitterBingoClient implements BingoClient {
       return this.bingoCode
    }
 
-   setBingoCode(code: string): void {
+   setBingoCode(code?: string): void {
+      if (this.bingoCode) {
+         this.emitter.leave(this.bingoCode)
+      }
       if (code && code.length > 0) {
          this.emitter.join(code)
-      }
-      else if (this.bingoCode) {
-         this.emitter.leave(this.bingoCode)
       }
       this.bingoCode = code
    }

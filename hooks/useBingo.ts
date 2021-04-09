@@ -22,6 +22,7 @@ export default function useBingo(bingoCode: string): UseBingoReturn {
          setBingo(bingo)
          
          const subscription = bingo.observeState().subscribe(updateState)
+         bingo.spectate(bingoCode)
          bingo.getState(bingoCode)
          
          return () => {
