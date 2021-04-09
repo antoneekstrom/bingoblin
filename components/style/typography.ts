@@ -38,7 +38,7 @@ export const BingoCellText = styled.p`
    font-family: "Nunito";
    font-weight: 700;
    text-transform: "capitalize";
-   color: ${colors.PRIMARY};
+   color: inherit;
    font-size: 16px;
    text-align: center;
    text-overflow: ellipsis;

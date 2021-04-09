@@ -1,11 +1,10 @@
-import { shuffle } from "../common/arrays";
-import BingoModel from "../common/BingoModel";
-import { BingoCell, BingoState } from "../common/model/bingo";
+import { range, shuffle } from '../common/arrays'
+import BingoModel from '../common/BingoModel'
+import { BingoCell, BingoState } from '../common/model/bingo'
 
 const NO_COLOR = undefined
 
 export default class FrontendBingoModel extends BingoModel {
-
    static from(state: BingoState): FrontendBingoModel {
       return new FrontendBingoModel(state.board, state.players)
    }
@@ -14,10 +13,9 @@ export default class FrontendBingoModel extends BingoModel {
       const cell = this.board.items[index]
 
       if (this.isCellEmpty(cell)) {
-         this.setCell(index, {...cell, index, color: color})
-      }
-      else if (cell.color == color) {
-         this.setCell(index, {...cell, index, color: NO_COLOR})
+         this.setCell(index, { ...cell, index, color: color })
+      } else if (cell.color == color) {
+         this.setCell(index, { ...cell, index, color: NO_COLOR })
       }
 
       return this
@@ -29,7 +27,11 @@ export default class FrontendBingoModel extends BingoModel {
    }
 
    setCellNames(names: string[]) {
-      this.board.items = this.board.items.map((item, i) => ({...item, name: names?.[i]}))
+      const { size } = this.board
+      this.board.items = range(size * size).map((index) => ({
+         name: names?.[index],
+         index
+      }))
       return this
    }
 
@@ -41,5 +43,4 @@ export default class FrontendBingoModel extends BingoModel {
    isCellEmpty(cell: BingoCell): boolean {
       return !cell || !cell?.color
    }
-
 }

@@ -3,6 +3,7 @@ import FrontendBingoModel from '../client/FrontendBingoModel'
 import { BingoPlayer, BingoState } from '../common/model/bingo'
 import { BingoFrontend } from '../common/model/protocol'
 import useBingoContext from '../hooks/useBingoContext'
+import BingoCode from './BingoCode'
 import BingoPalette from './BingoPalette'
 import StatefulTextField from './StatefulTextField'
 import { SettingsLayout } from './style/page'
@@ -71,6 +72,7 @@ export default function BingoMenu({
             }}
             blur
          />
+
          <BingoPalette
             disabled={disabled}
             onSetColor={setColor}

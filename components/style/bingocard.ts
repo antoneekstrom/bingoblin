@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+import colors from './colors'
 import { props } from './index'
 
 export type BingoGridStyle = {
@@ -11,6 +12,7 @@ export type BingoCardStyle = {
 
 export type BingoGridCellStyle = {
    color: string
+   textColor?: string
    clickable?: boolean
 }
 
@@ -58,6 +60,7 @@ export const BingoGridLayout = styled.ol<BingoGridStyle>`
 
 export const BingoGridCell = styled.li<BingoGridCellStyle>`
    background-color: ${props('color')};
+   color: ${props('textColor')};
    
    display: grid;
    place-items: center;

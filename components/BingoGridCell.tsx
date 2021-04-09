@@ -13,7 +13,6 @@ export class BingoGridCellFactory {
       return (props) => (
          <BaseBingoGridCell
             {...props}
-            color={props.color || colors.SECONDARY_DARKENED}
             onClick={cell => onClick?.(cell)}
          />
       )
@@ -26,11 +25,12 @@ export class BingoGridCellFactory {
 }
 
 export function BaseBingoGridCell(
-   props: BingoGridCellProps & Required<Pick<BingoCell, 'color'>>
+   props: BingoGridCellProps & Pick<BingoCell, 'color'>
 ) {
    return (
       <BingoGridCell
-         color={props.color}
+         color={props.color ?? colors.SECONDARY_DARKENED}
+         textColor={props.color ? colors.SECONDARY : colors.PRIMARY}
          onClick={() => props.onClick?.(props)}
       >
          <BingoCellText>{props.name}</BingoCellText>

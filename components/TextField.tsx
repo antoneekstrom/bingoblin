@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import colors from './style/colors'
 import { Label } from './style/typography'
+import WithLabel from './WithLabel'
 
 export type TextFieldProps = Omit<React.HTMLProps<HTMLInputElement>, 'as' | 'ref'> & {
    label?: string
@@ -23,20 +24,12 @@ const Input = styled.input`
    }
 `
 
-export const Container = styled.div`
-   display: flex;
-   flex-direction: column;
-   display: grid;
-   gap: 7px;
-`
-
 export default function TextField(props: TextFieldProps) {
    const { label, disabled } = props
 
    return (
-      <Container className="input">
-         {label && <Label disabled={disabled}>{label}</Label>}
+      <WithLabel className="input" label={label} disabled={disabled}>
          <Input {...props} />
-      </Container>
+      </WithLabel>
    )
 }

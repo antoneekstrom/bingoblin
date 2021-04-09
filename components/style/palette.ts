@@ -15,7 +15,7 @@ export const ColorSwatch = styled.div<ColorSwatchStyle>`
    border-radius: 12px;
    border-style: solid;
    border-width: 3px;
-   border-color: ${({selected: active}) => active ? colors.SECONDARY : 'transparent'};
+   border-color: ${({selected, disabled}) => selected ? (!disabled ? colors.SECONDARY : colors.SECONDARY_DISABLED) : 'transparent'};
    pointer-events: ${({disabled}) => disabled ? 'none' : 'unset'};
 `
 
@@ -25,4 +25,6 @@ export const ColorPaletteLayout = styled.ul`
    gap: 0.2em;
    justify-content: space-between;
    padding: 0;
+   width: 100%;
+   margin: 0;
 `

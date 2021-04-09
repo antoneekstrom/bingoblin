@@ -1,7 +1,7 @@
-import { BingoPlayer, BingoPlayerState } from "../../common/model/bingo";
+import { BingoPlayer, BingoPlayerState } from '../../common/model/bingo'
+import { omitUndefined } from '../../common/obj'
 
 export default class BingoPlayerBuilder {
-
    private player: Omit<BingoPlayer, 'role'>
 
    constructor(name: string, id: string) {
@@ -24,7 +24,7 @@ export default class BingoPlayerBuilder {
    }
 
    addMissing(partial?: Partial<BingoPlayer>) {
-      this.player = { ...partial, ...this.deleteUndefinedEntries(this.player) }
+      this.player = { ...partial, ...omitUndefined(this.player) }
       return this
    }
 
@@ -36,12 +36,11 @@ export default class BingoPlayerBuilder {
       return { id, state: 'spectating' }
    }
 
-   static default(name: string, id: string, color?: string): Omit<BingoPlayer, 'role'> {
+   static default(
+      name: string,
+      id: string,
+      color?: string
+   ): Omit<BingoPlayer, 'role'> {
       return { name, id, color, state: 'playing' }
    }
-
-   private deleteUndefinedEntries<T>(obj: T): T {
-      return Object.entries(obj).reduce<T>((r, [key, value]) => value ? {...r, [key]: value} : r, {} as T)
-   }
-
 }
