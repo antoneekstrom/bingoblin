@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export type UseStatefulFieldInit<T> = {
    onValue?: (value: T | undefined) => void
@@ -15,6 +15,10 @@ export default function useStatefulField<T>({
 }: UseStatefulFieldInit<T>) {
    const [value, setValue] = useState<string>(`${initialValue}`)
    const parsedValue = parseValue(value)
+
+   useEffect(() => {
+      setValue(`${initialValue}`)
+   }, [initialValue])
 
    function onBlur(_: React.FocusEvent<unknown>) {
       if (blur) {

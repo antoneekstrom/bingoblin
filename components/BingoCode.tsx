@@ -28,13 +28,25 @@ const Code = styled.input<BingoCodeStyle>`
    border: none;
    outline: 0;
    max-width: min-content;
-
    text-align: center;
 
    &:disabled {
       color: ${colors.SECONDARY_DISABLED};
       background-color: ${colors.PRIMARY_DISABLED};
    }
+
+   border-color: transparent;
+   border-style: solid;
+   border-width: 2px;
+   &:focus {
+      border-color: ${colors.SECONDARY_DARKENED};
+   }
+`
+
+const Form = styled.form`
+   position: fixed;
+   top: 20px;
+   left: 20px;
 `
 
 export default function BingoCode({ bingoCode, setBingoCode, disabled }: BingoCodeProps) {
@@ -46,7 +58,7 @@ export default function BingoCode({ bingoCode, setBingoCode, disabled }: BingoCo
    })
 
    return (
-      <WithLabel as="form" label="Code" {...formProps}>
+      <WithLabel as={Form} label="Code" {...formProps}>
          <Code disabled={disabled} size={8} maxLength={7} {...fieldProps} />
       </WithLabel>
    )

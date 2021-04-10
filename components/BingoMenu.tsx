@@ -63,7 +63,6 @@ export default function BingoMenu({
             <BingoCode
                bingoCode={bingoCode}
                setBingoCode={setBingoCode}
-               disabled={disabled}
             />
 
             <StatefulTextField

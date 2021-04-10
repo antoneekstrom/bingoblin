@@ -11,7 +11,6 @@ export type TextFieldStyle = unknown
 
 const Input = styled.input`
    background-color: ${colors.PRIMARY_DARKENED};
-   border: none;
    outline: none;
    padding: 0.5em 2em;
    border-radius: 100px;
@@ -20,6 +19,13 @@ const Input = styled.input`
    &:disabled {
       color: ${colors.SECONDARY_DISABLED};
       background-color: ${colors.PRIMARY_DISABLED};
+   }
+
+   border-color: transparent;
+   border-style: solid;
+   border-width: 2px;
+   &:focus {
+      border-color: ${colors.SECONDARY_DARKENED};
    }
 `
 

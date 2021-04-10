@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import useStatefulField, { UseStatefulFieldInit } from '../hooks/useStatefulField'
 import colors from './style/colors'
@@ -40,11 +40,23 @@ const Button = styled.button<{ side: 'left' | 'right' }>`
    cursor: pointer;
    border-radius: ${({ side }) =>
       side == 'left' ? '100px 0 0 100px' : '0 100px 100px 0'};
+
+   &:hover {
+      background-color: ${colors.PRIMARY_ACTIVE};
+   }
 `
 
 const Form = styled.form`
    display: flex;
    flex-direction: row;
+
+   border-radius: 100px;
+   border-color: transparent;
+   border-style: solid;
+   border-width: 2px;
+   &:focus-within {
+      border-color: ${colors.SECONDARY_DARKENED};
+   }
 `
 
 export default function NumberIncrementInput(props: NumberIncrementInputProps) {
@@ -57,8 +69,16 @@ export default function NumberIncrementInput(props: NumberIncrementInputProps) {
       },
    })
 
-   const increment = () => setValue(clamp(min ?? 0, parsedValue + (step ?? 1), max))
-   const decrement = () => setValue(clamp(min ?? 0, parsedValue - (step ?? 1), max))
+   const increment = () => {
+      const value = clamp(min ?? 0, parsedValue + (step ?? 1), max)
+      setValue(value)
+      props.onValue?.(value)
+   }
+   const decrement = () => {
+      const value = clamp(min ?? 0, parsedValue - (step ?? 1), max)
+      setValue(value)
+      props.onValue?.(value)
+   }
 
    return (
       <WithLabel label={label}>

@@ -14,7 +14,7 @@ export const ColorSwatch = styled.div<ColorSwatchStyle>`
    cursor: pointer;
    border-radius: 12px;
    border-style: solid;
-   border-width: 3px;
+   border-width: 2px;
    border-color: ${({selected, disabled}) => selected ? (!disabled ? colors.SECONDARY : colors.SECONDARY_DISABLED) : 'transparent'};
    pointer-events: ${({disabled}) => disabled ? 'none' : 'unset'};
 `
