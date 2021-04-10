@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import colors from './style/colors'
-import { Label } from './style/typography'
 import WithLabel from './WithLabel'
 
 export type TextFieldProps = Omit<React.HTMLProps<HTMLInputElement>, 'as' | 'ref'> & {

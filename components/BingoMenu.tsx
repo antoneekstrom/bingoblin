@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import FrontendBingoModel from '../client/FrontendBingoModel'
 import { BingoPlayer, BingoState } from '../common/model/bingo'
 import { BingoFrontend } from '../common/model/protocol'
 import useBingoContext from '../hooks/useBingoContext'
 import BingoCode from './BingoCode'
 import BingoPalette from './BingoPalette'
+import NumberIncrementInput from './NumberIncrementInput'
 import StatefulTextField from './StatefulTextField'
 import { SettingsLayout } from './style/page'
 import { Header, Label } from './style/typography'
@@ -48,42 +49,60 @@ export default function BingoMenu({
    bingoCode,
    setBingoCode,
 }: BingoMenuProps) {
-
    const [localColor, setLocalColor] = useState<string | undefined>()
 
+   useEffect(() => {
+      localColor && setColor(localColor)
+   }, [bingoCode])
+
    return (
-      <SettingsLayout>
+      <SettingsLayout align="center" style={{ paddingTop: '10rem' }}>
          <Header>Me</Header>
-         <StatefulTextField
-            disabled={disabled}
-            label="Name"
-            initialValue={self?.name}
-            onValue={(name) => {
-               name && bingo?.register(name, bingoCode, self)
-            }}
-            blur
-         />
-         <StatefulTextField
-            disabled={disabled}
-            label="Bingo Code"
-            initialValue={bingoCode}
-            onValue={(code) => {
-               code && setBingoCode(code)
-            }}
-            blur
-         />
+         <SettingsLayout>
+            
+            <BingoCode
+               bingoCode={bingoCode}
+               setBingoCode={setBingoCode}
+               disabled={disabled}
+            />
 
-         <BingoPalette
-            disabled={disabled}
-            onSetColor={setColor}
-            selected={self?.color ?? localColor}
-         />
+            <StatefulTextField
+               disabled={disabled}
+               label="Name"
+               initialValue={self?.name ?? ''}
+               onValue={(name) => {
+                  name && bingo?.register(name, bingoCode, self)
+               }}
+               blur
+            />
 
-         <Label>Players</Label>
-         {state?.players.filter(p => p.state != 'spectating').map((p) => (
-            <UserProfileCircle name={p.name} key={p.id} color={p.color} />
-         ))}
+            <NumberIncrementInput
+               disabled={disabled}
+               min={2}
+               max={10}
+               initialValue={state?.board.size ?? 5}
+               label="Size"
+               onValue={size => {
+                  state && size && bingo?.requestStateUpdate(FrontendBingoModel.from(state).setSize(size).getState())
+               }}
+            />
 
+            <BingoPalette
+               disabled={disabled}
+               onSetColor={setColor}
+               selected={self?.color ?? localColor}
+            />
+
+            <div style={{ paddingTop: '2rem', display: 'flex', flexDirection: 'column' }}>
+               <Label>Players</Label>
+               {state?.players
+                  .filter((p) => p.state != 'spectating')
+                  .map((p) => (
+                     <UserProfileCircle name={p.name} key={p.id} color={p.color} />
+                  ))}
+            </div>
+
+         </SettingsLayout>
       </SettingsLayout>
    )
 

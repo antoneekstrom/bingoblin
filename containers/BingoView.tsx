@@ -8,6 +8,8 @@ import { BingoPage, Sidebar } from '../components/style/page'
 import FrontendBingoModel from '../client/FrontendBingoModel'
 import { ConnectedBingoMenu } from '../components/BingoMenu'
 import { BingoContext, BingoContextProvider } from '../hooks/useBingoContext'
+import { BingoBoard, BingoCell } from '../common/model/bingo'
+import { shuffle } from '../common/arrays'
 
 export default function BingoView() {
    const [bingoCode, setBingoCode] = useBingoCode('bongo')
@@ -50,10 +52,10 @@ export default function BingoView() {
    async function onDrop(e: React.DragEvent) {
       const f = e.dataTransfer.files?.[0]
       if (state && f) {
-         const t = await f.text()
+         const t = (JSON.parse(await f.text()) as BingoBoard)
+         t.items = shuffle(t.items).map((item, index) => ({...item, index} as BingoCell))
          bingo?.requestStateUpdate(
-            FrontendBingoModel.from(state)
-               .setCellNames(t.split('\n'))
+            new FrontendBingoModel(t, state.players)
                .getState()
          )
       }

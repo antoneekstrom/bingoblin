@@ -1,16 +1,20 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
+import useStatefulField from '../hooks/useStatefulField'
 import colors from './style/colors'
 import WithLabel from './WithLabel'
 
 export type BingoCodeProps = {
    bingoCode: string
    setBingoCode?: (bingoCode: string) => void
+   disabled?: boolean
 }
 
-export type BingoCodeStyle = unknown
+export type BingoCodeStyle = {
+   disabled?: boolean
+}
 
-const Code = styled.input`
+const Code = styled.input<BingoCodeStyle>`
    background-color: ${colors.PRIMARY_DARKENED};
    padding: 0.25em 0.6em;
    align-items: center;
@@ -26,19 +30,24 @@ const Code = styled.input`
    max-width: min-content;
 
    text-align: center;
+
+   &:disabled {
+      color: ${colors.SECONDARY_DISABLED};
+      background-color: ${colors.PRIMARY_DISABLED};
+   }
 `
 
-export default function BingoCode({ bingoCode, setBingoCode }: BingoCodeProps) {
-   const [value, setValue] = useState(bingoCode)
+export default function BingoCode({ bingoCode, setBingoCode, disabled }: BingoCodeProps) {
+   const { fieldProps, formProps } = useStatefulField({
+      blur: true,
+      initialValue: bingoCode,
+      onValue: code => code && setBingoCode?.(code),
+      parseValue: value => value
+   })
 
    return (
-      <WithLabel label="Code">
-         <Code
-            size={8}
-            maxLength={7}
-            value={value.length > 3 ? `${value.slice(0, 3)} ${value.slice(4, 6)}` : value}
-            onChange={(e) => setValue(e.target.value.length > 3 ? value.slice(0, 3) + value.slice(4, 6) : e.target.value)}
-         />
+      <WithLabel as="form" label="Code" {...formProps}>
+         <Code disabled={disabled} size={8} maxLength={7} {...fieldProps} />
       </WithLabel>
    )
 }

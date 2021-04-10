@@ -1,4 +1,9 @@
 import styled from 'styled-components'
+import { props } from '.'
+
+export type SettingsLayoutStyle = {
+   align?: 'center' | 'start' | 'end'
+}
 
 export const BingoPage = styled.div`
    width: 100vw;
@@ -17,13 +22,12 @@ export const Sidebar = styled.div`
    place-items: center;
 `
 
-export const SettingsLayout = styled.div`
+export const SettingsLayout = styled.div<SettingsLayoutStyle>`
    height: 100%;
-   padding-top: 10rem;
 
    display: flex;
    flex-direction: column;
-   align-items: center;
+   align-items: ${props('align') ?? 'center'};
 
    div.input {
       padding: 0.5rem 0;

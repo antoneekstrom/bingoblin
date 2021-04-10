@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import FrontendBingoModel from '../client/FrontendBingoModel'
-import { BingoBoard, BingoCell } from '../common/model/bingo'
+import { BingoBoard, BingoCell, BingoPlayer } from '../common/model/bingo'
 import useBingoContext from '../hooks/useBingoContext'
 import BingoGrid from './BingoGrid'
 import { BingoGridCellFactory } from './BingoGridCell'
@@ -13,6 +13,7 @@ export type BingoCardProps = {
    onClickTitle?: (e: React.MouseEvent) => void
    onClick?: (e: React.MouseEvent) => void
    onClickCell?: (cell: BingoCell) => void
+   self?: BingoPlayer
 }
 
 export function ConnectedBingoCard() {
@@ -22,7 +23,7 @@ export function ConnectedBingoCard() {
       self,
       isCardHiddenState: [isCardHidden, setIsCardHidden],
    } = useBingoContext()
-   const toggleCardHidden = () => setIsCardHidden(state => !state)
+   const toggleCardHidden = () => setIsCardHidden((state) => !state)
 
    return (
       <BingoCard
@@ -31,6 +32,7 @@ export function ConnectedBingoCard() {
          onClick={toggleCardHidden}
          onClickTitle={toggleCardHidden}
          onClickCell={toggleCell}
+         self={self}
       />
    )
 
@@ -51,17 +53,23 @@ export default function BingoCard({
    onClickTitle,
    onClickCell,
    onClick,
+   self,
 }: BingoCardProps) {
-   const cell = !self
-      ? BingoGridCellFactory.unavailable()
-      : BingoGridCellFactory.base(cell => onClickCell?.(cell) ?? (() => {}))
+   const cell = BingoGridCellFactory.base(
+      (cell) => self?.state == 'playing' && onClickCell?.(cell),
+      (cell) => self?.state == 'playing' && (!cell.color || cell.color == self?.color)
+   )
    const titleRef = useRef<HTMLHeadingElement | any>()
 
    return (
       <BingoCardStyle onClick={onClickCard} hidden={hidden}>
          <BingoTitle ref={titleRef}>BINGOBLIN</BingoTitle>
          <BingoGridContainer>
-            {board ? <BingoGrid {...board} cell={cell} /> : <h1>no board 😭</h1> }
+            {board ? (
+               <BingoGrid {...board} cell={cell} />
+            ) : (
+               <h1>no board 😭</h1>
+            )}
          </BingoGridContainer>
       </BingoCardStyle>
    )
