@@ -4,8 +4,8 @@ import { omitUndefined } from '../../common/obj'
 export default class BingoPlayerBuilder {
    private player: Omit<BingoPlayer, 'role'>
 
-   constructor(name: string, id: string) {
-      this.player = BingoPlayerBuilder.default(name, id)
+   private constructor(player: Omit<BingoPlayer, 'role'>) {
+      this.player = player
    }
 
    setState(state: BingoPlayerState) {
@@ -23,6 +23,11 @@ export default class BingoPlayerBuilder {
       return this
    }
 
+   setImageUrl(url: string) {
+      this.player.imgUrl = url
+      return this
+   }
+
    addMissing(partial?: Partial<BingoPlayer>) {
       this.player = { ...partial, ...omitUndefined(this.player) }
       return this
@@ -32,15 +37,15 @@ export default class BingoPlayerBuilder {
       return { ...this.player }
    }
 
-   static spectator(id: string): Omit<BingoPlayer, 'role'> {
-      return { id, state: 'spectating' }
+   static spectator(id: string) {
+      return new BingoPlayerBuilder({id, state: 'spectating'})
    }
 
    static default(
       name: string,
       id: string,
       color?: string
-   ): Omit<BingoPlayer, 'role'> {
-      return { name, id, color, state: 'playing' }
+   ) {
+      return new BingoPlayerBuilder({ name, id, color, state: 'playing' })
    }
 }

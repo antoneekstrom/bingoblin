@@ -6,7 +6,8 @@ const colors = {
    PRIMARY_ACTIVE: '#5248DB',
    SECONDARY: '#FFFFFF',
    SECONDARY_DARKENED: '#ECEBFA',
-   SECONDARY_DISABLED: 'rgba(255,255,255,0.3)'
+   SECONDARY_DISABLED: 'rgba(255,255,255,0.3)',
+   ERROR: 'red'
 }
 
 export default colors

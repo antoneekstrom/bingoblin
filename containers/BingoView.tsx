@@ -4,12 +4,13 @@ import BingoModel from '../common/BingoModel'
 import { useRouter } from 'next/dist/client/router'
 import { ConnectedBingoCard } from '../components/BingoCard'
 import PageDropzone from '../components/PageDropzone'
-import { BingoPage, Sidebar } from '../components/style/page'
+import { BingoPage, Sidebar } from '../components/BingoView.style'
 import FrontendBingoModel from '../client/FrontendBingoModel'
 import { ConnectedBingoMenu } from '../components/BingoMenu'
 import { BingoContext, BingoContextProvider } from '../hooks/useBingoContext'
 import { BingoBoard, BingoCell } from '../common/model/bingo'
 import { shuffle } from '../common/arrays'
+import { BingoContainer } from '../components/BingoCard.style'
 
 export default function BingoView() {
    const [bingoCode, setBingoCode] = useBingoCode('bongo')
@@ -37,10 +38,11 @@ export default function BingoView() {
             onWheel={(e) => setIsCardHidden(e.deltaY > 0)}
          >
             <Sidebar />
-            <ConnectedBingoMenu />
+            <BingoContainer>
+               <ConnectedBingoMenu />
+               <ConnectedBingoCard />
+            </BingoContainer>
             <Sidebar />
-            <ConnectedBingoCard />
-            <PageDropzone onDrop={onDrop} />
          </BingoPage>
       </BingoContextProvider>
    )

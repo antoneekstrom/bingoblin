@@ -23,8 +23,8 @@ export default class BackendBingoModel extends BingoModel {
       return lenBefore != this.players.length
    }
 
-   assignRole(noRole: Omit<BingoPlayer, 'role'>): BingoPlayer {
-      const role: BingoPlayerRole = this.players.length == 0 ? 'owner' : 'guest'
+   assignRole(noRole: Omit<BingoPlayer, 'role'>, current?: Partial<BingoPlayer>): BingoPlayer {
+      const role: BingoPlayerRole = (this.players.length == 0) || (current?.role == 'owner') ? 'owner' : 'guest'
       return { ...noRole, role }
    }
 

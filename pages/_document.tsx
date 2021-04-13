@@ -1,4 +1,10 @@
-import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
+import Document, {
+   DocumentContext,
+   Head,
+   Html,
+   Main,
+   NextScript,
+} from 'next/document'
 import { ServerStyleSheet } from 'styled-components'
 
 export default class MyDocument extends Document {
@@ -37,11 +43,15 @@ export default class MyDocument extends Document {
                   href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700&family=Raleway:wght@700;900&display=swap"
                   rel="stylesheet"
                />
+               <link
+                  href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+                  rel="stylesheet"
+               />
                <link rel="icon" href="/icon.png" />
             </Head>
             <body>
-               <Main/>
-               <NextScript/>
+               <Main />
+               <NextScript />
             </body>
          </Html>
       )

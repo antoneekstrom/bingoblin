@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { props } from '.'
 
 export type SettingsLayoutStyle = {
    align?: 'center' | 'start' | 'end'
@@ -10,6 +9,7 @@ export const BingoPage = styled.div`
    height: 100vh;
    overflow: hidden;
 
+   /* Splits the page into two sidebars and the main content in the center */
    display: grid;
    place-items: center;
    grid-template-columns: 1fr auto 1fr;
@@ -20,16 +20,4 @@ export const Sidebar = styled.div`
    height: 100%;
    display: grid;
    place-items: center;
-`
-
-export const SettingsLayout = styled.div<SettingsLayoutStyle>`
-   height: 100%;
-
-   display: flex;
-   flex-direction: column;
-   align-items: ${props('align') ?? 'center'};
-
-   div.input {
-      padding: 0.5rem 0;
-   }
 `

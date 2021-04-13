@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import colors from "./colors";
+import colors from "./style/colors";
 
 export type ColorSwatchStyle = {
    color: string
@@ -12,7 +12,7 @@ export const ColorSwatch = styled.div<ColorSwatchStyle>`
    height: 2em;
    background-color: ${({color, disabled}) => disabled ? colors.PRIMARY_DISABLED : color};
    cursor: pointer;
-   border-radius: 12px;
+   border-radius: 2em;
    border-style: solid;
    border-width: 2px;
    border-color: ${({selected, disabled}) => selected ? (!disabled ? colors.SECONDARY : colors.SECONDARY_DISABLED) : 'transparent'};

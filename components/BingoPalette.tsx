@@ -1,5 +1,5 @@
 import React from 'react'
-import { ColorPaletteLayout, ColorSwatch } from './style/palette'
+import { ColorPaletteLayout, ColorSwatch } from './ColorPalette.style'
 import WithLabel from './WithLabel'
 
 export type BingoPaletteProps = {
@@ -9,11 +9,13 @@ export type BingoPaletteProps = {
 }
 
 export const BINGO_PALETTE_COLORS = [
-   '#FFB800',
+   '#93e9ff',
    '#34B460',
-   '#FF7A00',
+   '#ffcf32',
+   '#ff7b00',
    '#FF2E00',
-   '#FF00A8',
+   '#ff4db5',
+   '#ab2eff',
 ]
 
 export default function BingoPalette(props: BingoPaletteProps) {

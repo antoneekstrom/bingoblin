@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle, css } from 'styled-components'
 import colors from './colors'
 
 export const GlobalStyle = createGlobalStyle`
@@ -24,6 +24,16 @@ export const GlobalStyle = createGlobalStyle`
    }
 `
 
-export function props<T, P extends keyof T>(property: P, fn?: (property: T[P]) => any): (props: T) => T[P] {
-   return (props: T) => fn ? fn(props[property]) : props[property]
+export function props<T, P extends keyof T>(
+   property: P,
+   fn?: (property: T[P]) => any
+): (props: T) => T[P] {
+   return (props: T) => (fn ? fn(props[property]) : props[property])
+}
+
+export function propsIf<T, P extends keyof T>(
+   property: P,
+   fn: (property: T[P]) => string | ReturnType<typeof css>
+): (props: T) => string | ReturnType<typeof css> {
+   return (props: T) => props[property] && fn(props[property])
 }

@@ -4,8 +4,7 @@ import { BingoBoard, BingoCell, BingoPlayer } from '../common/model/bingo'
 import useBingoContext from '../hooks/useBingoContext'
 import BingoGrid from './BingoGrid'
 import { BingoGridCellFactory } from './BingoGridCell'
-import { BingoCardStyle, BingoGridContainer } from './style/bingocard'
-import { BingoTitle } from './style/typography'
+import { BingoCardStyle, BingoGridLayoutContainer, BingoTitle } from './BingoCard.style'
 
 export type BingoCardProps = {
    board?: BingoBoard
@@ -60,17 +59,17 @@ export default function BingoCard({
       (cell) => self?.state == 'playing' && (!cell.color || cell.color == self?.color)
    )
    const titleRef = useRef<HTMLHeadingElement | any>()
-
+   
    return (
       <BingoCardStyle onClick={onClickCard} hidden={hidden}>
          <BingoTitle ref={titleRef}>BINGOBLIN</BingoTitle>
-         <BingoGridContainer>
+         <BingoGridLayoutContainer>
             {board ? (
                <BingoGrid {...board} cell={cell} />
             ) : (
                <h1>no board 😭</h1>
             )}
-         </BingoGridContainer>
+         </BingoGridLayoutContainer>
       </BingoCardStyle>
    )
 

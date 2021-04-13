@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import colors from './colors'
+import colors from './style/colors'
 
 export const Tooltip = styled.div`
    background-color: ${colors.SECONDARY};

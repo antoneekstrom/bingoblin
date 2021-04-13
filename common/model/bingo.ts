@@ -27,6 +27,7 @@ export type BingoPlayer = {
    name?: string
    id: string
    color?: string
+   imgUrl?: string
    state: BingoPlayerState
    role: BingoPlayerRole
 }

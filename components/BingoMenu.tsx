@@ -3,11 +3,13 @@ import FrontendBingoModel from '../client/FrontendBingoModel'
 import { BingoPlayer, BingoState } from '../common/model/bingo'
 import { BingoFrontend } from '../common/model/protocol'
 import useBingoContext from '../hooks/useBingoContext'
+import BingoBoardSettings from './BingoBoardSettings'
 import BingoCode from './BingoCode'
 import BingoPalette from './BingoPalette'
+import BingoPlayerList from './BingoPlayerList'
 import NumberIncrementInput from './NumberIncrementInput'
 import StatefulTextField from './StatefulTextField'
-import { SettingsLayout } from './style/page'
+import { Flex } from './style/layout'
 import { Header, Label } from './style/typography'
 import UserProfileCircle from './UserProfileCircle'
 
@@ -56,14 +58,10 @@ export default function BingoMenu({
    }, [bingoCode])
 
    return (
-      <SettingsLayout align="center" style={{ paddingTop: '10rem' }}>
+      <Flex align="center" justify="start" expand style={{ maxWidth: '50%', paddingTop: '4rem' }}>
          <Header>Me</Header>
-         <SettingsLayout>
-            
-            <BingoCode
-               bingoCode={bingoCode}
-               setBingoCode={setBingoCode}
-            />
+         <Flex gap="2em">
+            <BingoCode bingoCode={bingoCode} setBingoCode={setBingoCode} />
 
             <StatefulTextField
                disabled={disabled}
@@ -75,34 +73,17 @@ export default function BingoMenu({
                blur
             />
 
-            <NumberIncrementInput
-               disabled={disabled}
-               min={2}
-               max={10}
-               initialValue={state?.board.size ?? 5}
-               label="Size"
-               onValue={size => {
-                  state && size && bingo?.requestStateUpdate(FrontendBingoModel.from(state).setSize(size).getState())
-               }}
-            />
-
             <BingoPalette
                disabled={disabled}
                onSetColor={setColor}
                selected={self?.color ?? localColor}
             />
 
-            <div style={{ paddingTop: '2rem', display: 'flex', flexDirection: 'column' }}>
-               <Label>Players</Label>
-               {state?.players
-                  .filter((p) => p.state != 'spectating')
-                  .map((p) => (
-                     <UserProfileCircle name={p.name} key={p.id} color={p.color} />
-                  ))}
-            </div>
+            {state && <BingoPlayerList players={state?.players} />}
 
-         </SettingsLayout>
-      </SettingsLayout>
+            {self?.role == 'owner' && <BingoBoardSettings/>}
+         </Flex>
+      </Flex>
    )
 
    function setColor(color: string) {
