@@ -21,10 +21,10 @@ export default function BingoBoardSettings(props: BingoBoardSettingsProps) {
    const [bingoFile, setBingoFile] = useState<File>()
 
    return (
-      <Flex align="center" justify="start">
+      <Flex align="center" justify="start" direction="column">
          <Header style={{marginTop: 0}}>Board</Header>
 
-         <Flex gap="2em" expand>
+         <Flex gap="2em" expand direction="column">
             <NumberIncrementInput
                disabled={!isCardHidden}
                min={2}

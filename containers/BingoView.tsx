@@ -3,7 +3,6 @@ import useBingo from '../hooks/useBingo'
 import BingoModel from '../common/BingoModel'
 import { useRouter } from 'next/dist/client/router'
 import { ConnectedBingoCard } from '../components/BingoCard'
-import PageDropzone from '../components/PageDropzone'
 import { BingoPage, Sidebar } from '../components/BingoView.style'
 import FrontendBingoModel from '../client/FrontendBingoModel'
 import { ConnectedBingoMenu } from '../components/BingoMenu'
@@ -38,10 +37,12 @@ export default function BingoView() {
             onWheel={(e) => setIsCardHidden(e.deltaY > 0)}
          >
             <Sidebar />
+            
             <BingoContainer>
                <ConnectedBingoMenu />
                <ConnectedBingoCard />
             </BingoContainer>
+
             <Sidebar />
          </BingoPage>
       </BingoContextProvider>

@@ -4,7 +4,8 @@ import { BingoBoard, BingoCell, BingoPlayer } from '../common/model/bingo'
 import useBingoContext from '../hooks/useBingoContext'
 import BingoGrid from './BingoGrid'
 import { BingoGridCellFactory } from './BingoGridCell'
-import { BingoCardStyle, BingoGridLayoutContainer, BingoTitle } from './BingoCard.style'
+import { BingoCardContainer, BingoCardTitle } from './BingoCard.style'
+import { BingoGridLayoutContainer } from './BingoGrid.style'
 
 export type BingoCardProps = {
    board?: BingoBoard
@@ -61,8 +62,8 @@ export default function BingoCard({
    const titleRef = useRef<HTMLHeadingElement | any>()
    
    return (
-      <BingoCardStyle onClick={onClickCard} hidden={hidden}>
-         <BingoTitle ref={titleRef}>BINGOBLIN</BingoTitle>
+      <BingoCardContainer onClick={onClickCard} hidden={hidden}>
+         <BingoCardTitle ref={titleRef}>BINGOBLIN</BingoCardTitle>
          <BingoGridLayoutContainer>
             {board ? (
                <BingoGrid {...board} cell={cell} />
@@ -70,7 +71,7 @@ export default function BingoCard({
                <h1>no board 😭</h1>
             )}
          </BingoGridLayoutContainer>
-      </BingoCardStyle>
+      </BingoCardContainer>
    )
 
    function onClickCard(e: React.MouseEvent) {

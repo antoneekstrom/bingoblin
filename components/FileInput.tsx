@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
-import { Button, Container, InnerContainer, Input } from './FileInput.style'
+import { FileInputContainer, FileInputInnerContainer, FileInputInner } from './FileInput.style'
+import { ButtonHalf } from './Input.style'
 import MaterialIcon from './MaterialIcon'
 import { Label } from './style/typography'
 
@@ -18,7 +19,6 @@ export const FileTypes = {
 }
 
 export default function FileInput({
-   onFile,
    file,
    match,
    type,
@@ -29,7 +29,7 @@ export default function FileInput({
    const [fileError, setFileError] = useState<Error | undefined>()
 
    return (
-      <Container
+      <FileInputContainer
          error={fileError != undefined}
          isDragging={isDragging}
          onDrop={onDrop}
@@ -39,22 +39,22 @@ export default function FileInput({
          onDragEnd={() => setIsDragging(false)}
          disabled={disabled}
       >
-         <InnerContainer disabled={disabled}>
+         <FileInputInnerContainer disabled={disabled}>
             <Label>{file?.name ?? 'Upload File'}</Label>
-            <Input
+            <FileInputInner
                type="file"
                onChange={onChange}
                ref={(el) => (fileInputRef.current = el as any)}
             />
-         </InnerContainer>
-         <Button
+         </FileInputInnerContainer>
+         <ButtonHalf
             side="right"
             onClick={() => fileInputRef.current?.click()}
             disabled={disabled}
          >
             <MaterialIcon size={22}>file_upload</MaterialIcon>
-         </Button>
-      </Container>
+         </ButtonHalf>
+      </FileInputContainer>
    )
 
    function onDrag(e: React.DragEvent<HTMLDivElement>) {

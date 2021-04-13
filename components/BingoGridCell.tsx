@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { BingoCell } from '../common/model/bingo'
 import useBingoContext from '../hooks/useBingoContext'
-import { BingoGridCell, BingoGridCellStyle, BingoGridCellText } from './BingoCard.style'
+import { BingoGridCell, BingoGridCellStyle, BingoGridCellLabel } from './BingoGrid.style'
 import colors from './style/colors'
 import { Tooltip } from './Tooltip.style'
 import { Label } from './style/typography'
@@ -49,7 +49,7 @@ export function BaseBingoGridCell(
          className="tooltip"
          selfColor={self?.color}
       >
-         <BingoGridCellText gridSize={state?.board?.size}>{props.name}</BingoGridCellText>
+         <BingoGridCellLabel gridSize={state?.board?.size}>{props.name}</BingoGridCellLabel>
          {props.details && (
             <Tooltip>
                <Label as="p">{props.details}</Label>

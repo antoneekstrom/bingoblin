@@ -58,9 +58,9 @@ export default function BingoMenu({
    }, [bingoCode])
 
    return (
-      <Flex align="center" justify="start" expand style={{ maxWidth: '50%', paddingTop: '4rem' }}>
+      <Flex align="center" justify="start" direction="column" expand style={{ maxWidth: '50%', paddingTop: '4rem' }}>
          <Header>Me</Header>
-         <Flex gap="2em">
+         <Flex gap="2em" direction="column">
             <BingoCode bingoCode={bingoCode} setBingoCode={setBingoCode} />
 
             <StatefulTextField

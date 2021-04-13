@@ -3,7 +3,7 @@ import * as arrays from '../common/arrays'
 import { uniqueKey } from '../common/key'
 import { BingoBoard } from '../common/model/bingo'
 import { BingoGridCellProps } from './BingoGridCell'
-import { BingoGridLayout } from './BingoCard.style'
+import { BingoGridLayout } from './BingoGrid.style'
 
 export type BingoGridProps = BingoBoard & {
    cell: FC<BingoGridCellProps>

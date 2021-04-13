@@ -1,28 +1,19 @@
 import styled, { css } from 'styled-components'
+import { Base, BaseStyle } from './Base.style'
 import { propsIf } from './style'
 import colors from './style/colors'
 
-export const Input = styled.input`
+/**
+ * 
+ */
+export const FileInputInner = styled.input`
    display: none;
 `
 
-export const Base = css`
-   color: ${colors.SECONDARY};
-   background-color: ${colors.PRIMARY_DARKENED};
-   padding: 0.5em 2em;
-   font-size: 16px;
-   border-radius: 100px;
-   border: none;
-   outline: none;
-   box-sizing: border-box;
-
-   &:disabled {
-      color: ${colors.SECONDARY_DISABLED};
-      background-color: ${colors.PRIMARY_DISABLED};
-   }
-`
-
-export const InnerContainer = styled.div<{disabled?: boolean}>`
+/**
+ * 
+ */
+export const FileInputInnerContainer = styled.div<BaseStyle>`
    ${Base}
    flex-grow: 1;
    border-radius: 100px 0 0 100px;
@@ -32,20 +23,10 @@ export const InnerContainer = styled.div<{disabled?: boolean}>`
    `)}
 `
 
-export const Button = styled.button<{ side: 'left' | 'right' }>`
-   ${Base}
-   cursor: pointer;
-   border-radius: ${({ side }) =>
-      side == 'left' ? '100px 0 0 100px' : '0 100px 100px 0'};
-
-   display: grid;
-
-   &:hover {
-      background-color: ${colors.PRIMARY_ACTIVE};
-   }
-`
-
-export const Container = styled.div<{disabled?: boolean, isDragging?: boolean, error?: boolean}>`
+/**
+ * 
+ */
+export const FileInputContainer = styled.div<{disabled?: boolean, isDragging?: boolean, error?: boolean}>`
    display: flex;
    flex-direction: row;
 
