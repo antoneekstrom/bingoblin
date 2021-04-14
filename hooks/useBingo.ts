@@ -3,18 +3,18 @@ import BingoFrontendFactory from "../client/BingoFrontendFactory";
 import useMakeSocket from "../hooks/useMakeSocket";
 import { BingoFrontend } from '../common/model/protocol';
 import { useEffect, useState } from "react";
-import { Socket } from "socket.io-client";
+import { ClientSocketEmitterWrapper } from "../common/SocketEmitterWrapper";
 
 export type UseBingoReturn = [
    bingo: BingoFrontend | undefined,
    state: BingoState | undefined,
-   socket: typeof Socket | undefined
+   socket: ClientSocketEmitterWrapper<unknown, any> | undefined
 ]
 
 export default function useBingo(bingoCode: string): UseBingoReturn {
    const [state, setState] = useState<BingoState>()
    const [bingo, setBingo] = useState<BingoFrontend>()
-   const socket = useMakeSocket()
+   let socket = useMakeSocket()
 
    useEffect(() => {
       if (bingoCode && socket) {
@@ -26,7 +26,6 @@ export default function useBingo(bingoCode: string): UseBingoReturn {
          bingo.getState(bingoCode)
          
          return () => {
-            console.log("cleanup")
             subscription.unsubscribe()
          }
       }
@@ -34,9 +33,8 @@ export default function useBingo(bingoCode: string): UseBingoReturn {
 
 
    function updateState(state: BingoState) {
-      console.log(state)
       setState(old => Object.assign({}, old, state))
    }
 
-   return [bingo, state, socket]
+   return [bingo, state, socket && new ClientSocketEmitterWrapper(socket)]
 }

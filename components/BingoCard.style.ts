@@ -13,11 +13,13 @@ export type BingoCardStyle = {
  * Contains the bingocard and also the menu behind the card.
  */
 export const BingoContainer = styled.div`
-   position: relative;
    width: clamp(600px, 50vw, 750px);
    height: 100%;
+
    display: flex;
    justify-content: center;
+   
+   position: relative;
 `
 
 /**

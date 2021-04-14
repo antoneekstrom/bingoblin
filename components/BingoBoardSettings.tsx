@@ -4,18 +4,17 @@ import { shuffle } from '../common/arrays'
 import { BingoBoard, BingoCell } from '../common/model/bingo'
 import useBingoContext from '../hooks/useBingoContext'
 import FileInput, { FileTypes } from './FileInput'
-import NumberIncrementInput from './NumberIncrementInput'
+import NumberIncrementInput from './IncrementInput'
 import { Flex } from './style/layout'
 import { Header } from './style/typography'
 import WithLabel from './WithLabel'
 
 export type BingoBoardSettingsProps = {}
 
-export default function BingoBoardSettings(props: BingoBoardSettingsProps) {
+export default function BingoBoardSettings({}: BingoBoardSettingsProps) {
    const {
       state,
       bingo,
-      isCardHiddenState: [isCardHidden],
    } = useBingoContext()
 
    const [bingoFile, setBingoFile] = useState<File>()
@@ -26,7 +25,6 @@ export default function BingoBoardSettings(props: BingoBoardSettingsProps) {
 
          <Flex gap="2em" expand direction="column">
             <NumberIncrementInput
-               disabled={!isCardHidden}
                min={2}
                max={10}
                initialValue={state?.board.size ?? 5}
@@ -46,7 +44,6 @@ export default function BingoBoardSettings(props: BingoBoardSettingsProps) {
                   file={bingoFile}
                   onFile={onBingoFile}
                   type={[FileTypes.json, FileTypes.text]}
-                  disabled={!isCardHidden}
                />
             </WithLabel>
          </Flex>
@@ -54,6 +51,7 @@ export default function BingoBoardSettings(props: BingoBoardSettingsProps) {
    )
 
    async function onBingoFile(f: File) {
+      console.log(f)
       if (state && f) {
          const t = (JSON.parse(await f.text()) as BingoBoard)
          t.items = shuffle(t.items).map((item, index) => ({...item, index} as BingoCell))

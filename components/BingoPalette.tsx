@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTheme } from 'styled-components'
 import { ColorPaletteLayout, ColorSwatch } from './ColorPalette.style'
 import WithLabel from './WithLabel'
 
@@ -19,12 +20,14 @@ export const BINGO_PALETTE_COLORS = [
 ]
 
 export default function BingoPalette(props: BingoPaletteProps) {
+   const { props: themeProps } = useTheme()
+
    return (
       <WithLabel label="Colors" style={{width: "100%"}}>
          <ColorPaletteLayout>
             {BINGO_PALETTE_COLORS.map((c) => (
                <ColorSwatch
-                  disabled={props.disabled}
+                  {...themeProps}
                   key={c}
                   color={c}
                   selected={props.selected == c}

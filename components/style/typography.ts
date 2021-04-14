@@ -2,7 +2,6 @@
  * Typography components.
  */
 import styled from 'styled-components'
-import colors from './colors'
 
 /**
  * 
@@ -18,7 +17,7 @@ export const Header = styled.h2`
    font-family: "Raleway";
    font-weight: 700;
    text-transform: "capitalize";
-   color: ${colors.SECONDARY};
+   color: inherit;
    font-size: 36px;
 `
 
@@ -29,6 +28,6 @@ export const Label = styled.label<LabelStyle>`
    font-family: "Nunito";
    font-weight: 600;
    text-transform: "capitalize";
-   color: ${({disabled}) => disabled ? colors.SECONDARY_DISABLED : colors.SECONDARY};
+   color: inherit;
    font-size: 16px;
 `

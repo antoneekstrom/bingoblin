@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+import { useTheme } from 'styled-components'
 import { FileInputContainer, FileInputInnerContainer, FileInputInner } from './FileInput.style'
 import { ButtonHalf } from './Input.style'
 import MaterialIcon from './MaterialIcon'
@@ -10,7 +11,6 @@ export type FileInputProps = {
    file?: File
    match?: RegExp
    type?: string | string[]
-   disabled?: boolean
 }
 
 export const FileTypes = {
@@ -22,11 +22,13 @@ export default function FileInput({
    file,
    match,
    type,
-   disabled,
+   onFile,
 }: FileInputProps) {
    const fileInputRef = useRef<HTMLInputElement | undefined>()
    const [isDragging, setIsDragging] = useState<boolean>(false)
    const [fileError, setFileError] = useState<Error | undefined>()
+
+   const { props: themeProps } = useTheme()
 
    return (
       <FileInputContainer
@@ -37,9 +39,9 @@ export default function FileInput({
          onDragEnter={() => setIsDragging(true)}
          onDragExit={() => setIsDragging(false)}
          onDragEnd={() => setIsDragging(false)}
-         disabled={disabled}
+         {...themeProps}
       >
-         <FileInputInnerContainer disabled={disabled}>
+         <FileInputInnerContainer {...themeProps}>
             <Label>{file?.name ?? 'Upload File'}</Label>
             <FileInputInner
                type="file"
@@ -50,7 +52,7 @@ export default function FileInput({
          <ButtonHalf
             side="right"
             onClick={() => fileInputRef.current?.click()}
-            disabled={disabled}
+            {...themeProps}
          >
             <MaterialIcon size={22}>file_upload</MaterialIcon>
          </ButtonHalf>
@@ -91,5 +93,6 @@ export default function FileInput({
       const file = files[0]
       const error = validate(file)
       setFileError(error)
+      onFile?.(file)
    }
 }

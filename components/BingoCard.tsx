@@ -16,53 +16,23 @@ export type BingoCardProps = {
    self?: BingoPlayer
 }
 
-export function ConnectedBingoCard() {
+export default function BingoCard() {
    const {
       bingo,
       state,
       self,
       isCardHiddenState: [isCardHidden, setIsCardHidden],
    } = useBingoContext()
-   const toggleCardHidden = () => setIsCardHidden((state) => !state)
+   const board = state?.board
 
-   return (
-      <BingoCard
-         board={state?.board}
-         hidden={isCardHidden}
-         onClick={toggleCardHidden}
-         onClickTitle={toggleCardHidden}
-         onClickCell={toggleCell}
-         self={self}
-      />
-   )
-
-   function toggleCell(cell: BingoCell) {
-      self &&
-         state &&
-         bingo?.requestStateUpdate(
-            FrontendBingoModel.from(state)
-               .toggleCell(cell.index, self.color)
-               .getState()
-         )
-   }
-}
-
-export default function BingoCard({
-   board,
-   hidden,
-   onClickTitle,
-   onClickCell,
-   onClick,
-   self,
-}: BingoCardProps) {
    const cell = BingoGridCellFactory.base(
-      (cell) => self?.state == 'playing' && onClickCell?.(cell),
+      (cell) => self?.state == 'playing' && toggleCell(cell),
       (cell) => self?.state == 'playing' && (!cell.color || cell.color == self?.color)
    )
    const titleRef = useRef<HTMLHeadingElement | any>()
    
    return (
-      <BingoCardContainer onClick={onClickCard} hidden={hidden}>
+      <BingoCardContainer onClick={onClickCard} hidden={isCardHidden}>
          <BingoCardTitle ref={titleRef}>BINGOBLIN</BingoCardTitle>
          <BingoGridLayoutContainer>
             {board ? (
@@ -74,12 +44,24 @@ export default function BingoCard({
       </BingoCardContainer>
    )
 
+   function toggleCardHidden() {
+      setIsCardHidden((state) => !state)
+   }
+
    function onClickCard(e: React.MouseEvent) {
       const isTitle = e.target == titleRef.current
-      if (isTitle) {
-         onClickTitle?.(e)
-      } else if (hidden) {
-         onClick?.(e)
+      if (isTitle || isCardHidden) {
+         toggleCardHidden()
       }
+   }
+
+   function toggleCell(cell: BingoCell) {
+      self &&
+         state &&
+         bingo?.requestStateUpdate(
+            FrontendBingoModel.from(state)
+               .toggleCell(cell.index, self.color)
+               .getState()
+         )
    }
 }

@@ -7,11 +7,9 @@ import BingoBoardSettings from './BingoBoardSettings'
 import BingoCode from './BingoCode'
 import BingoPalette from './BingoPalette'
 import BingoPlayerList from './BingoPlayerList'
-import NumberIncrementInput from './NumberIncrementInput'
-import StatefulTextField from './StatefulTextField'
+import StatefulTextField from './StatefulTextInput'
 import { Flex } from './style/layout'
-import { Header, Label } from './style/typography'
-import UserProfileCircle from './UserProfileCircle'
+import { Header } from './style/typography'
 
 export type BingoMenuProps = {
    disabled?: boolean
@@ -22,35 +20,14 @@ export type BingoMenuProps = {
    setBingoCode: (code: string) => void
 }
 
-export function ConnectedBingoMenu() {
+export default function BingoMenu() {
    const {
       bingo,
       state,
       bingoCodeState: [bingoCode, setBingoCode],
       self,
-      isCardHiddenState: [isCardHidden],
    } = useBingoContext()
 
-   return (
-      <BingoMenu
-         bingo={bingo}
-         bingoCode={bingoCode}
-         setBingoCode={setBingoCode}
-         self={self}
-         state={state}
-         disabled={!isCardHidden}
-      />
-   )
-}
-
-export default function BingoMenu({
-   disabled,
-   bingo,
-   state,
-   self,
-   bingoCode,
-   setBingoCode,
-}: BingoMenuProps) {
    const [localColor, setLocalColor] = useState<string | undefined>()
 
    useEffect(() => {
@@ -58,13 +35,18 @@ export default function BingoMenu({
    }, [bingoCode])
 
    return (
-      <Flex align="center" justify="start" direction="column" expand style={{ maxWidth: '50%', paddingTop: '4rem' }}>
+      <Flex
+         align="center"
+         justify="start"
+         direction="column"
+         expand
+         style={{ maxWidth: '50%', paddingTop: '4rem' }}
+      >
          <Header>Me</Header>
          <Flex gap="2em" direction="column">
             <BingoCode bingoCode={bingoCode} setBingoCode={setBingoCode} />
 
             <StatefulTextField
-               disabled={disabled}
                label="Name"
                initialValue={self?.name ?? ''}
                onValue={(name) => {
@@ -74,14 +56,13 @@ export default function BingoMenu({
             />
 
             <BingoPalette
-               disabled={disabled}
                onSetColor={setColor}
                selected={self?.color ?? localColor}
             />
 
             {state && <BingoPlayerList players={state?.players} />}
 
-            {self?.role == 'owner' && <BingoBoardSettings/>}
+            {self?.role == 'owner' && <BingoBoardSettings />}
          </Flex>
       </Flex>
    )

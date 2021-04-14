@@ -1,6 +1,6 @@
 import React from 'react'
 import useStatefulField, { UseStatefulFieldInit } from '../hooks/useStatefulField'
-import TextField, { TextFieldProps } from './TextField'
+import TextField, { TextFieldProps } from './TextInput'
 
 type InnerProps = Pick<TextFieldProps, 'onClick' | 'label' | 'disabled'>
 

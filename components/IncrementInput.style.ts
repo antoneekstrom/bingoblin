@@ -1,9 +1,9 @@
 import styled from 'styled-components'
-import { Base } from './Base.style'
-import colors from './style/colors'
+import { BASE, BORDER, DISABLED, FOCUSED } from './Base.style'
 
 export const NumberIncrementInputInner = styled.input`
-   ${Base}
+   ${BASE}
+   ${DISABLED}
    text-align: center;
    border-radius: 0;
 
@@ -11,15 +11,12 @@ export const NumberIncrementInputInner = styled.input`
 `
 
 export const NumberIncrementInputForm = styled.form`
+   ${BORDER}
+   ${FOCUSED}
+   ${DISABLED}
+
    display: flex;
    flex-direction: row;
 
    border-radius: 100px;
-   border-color: transparent;
-   border-style: solid;
-   border-width: 2px;
-
-   &:focus-within {
-      border-color: ${colors.SECONDARY_DARKENED};
-   }
 `

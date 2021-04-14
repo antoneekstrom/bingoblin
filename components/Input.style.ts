@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Base } from './Base.style'
+import { BASE, DISABLED } from './Base.style'
 import colors from './style/colors'
 import { Side } from './style/layout'
 
@@ -12,7 +12,8 @@ export type ButtonHalfStyle = Side
  * 
  */
 export const ButtonHalf = styled.button<ButtonHalfStyle>`
-   ${Base}
+   ${BASE}
+   ${DISABLED}
 
    display: grid;
 
