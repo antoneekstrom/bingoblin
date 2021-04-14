@@ -30,4 +30,8 @@ export const Label = styled.label<LabelStyle>`
    text-transform: "capitalize";
    color: inherit;
    font-size: 16px;
+
+   display: flex;
+   flex-direction: row;
+   align-items: center;
 `

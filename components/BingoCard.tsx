@@ -6,6 +6,8 @@ import BingoGrid from './BingoGrid'
 import { BingoGridCellFactory } from './BingoGridCell'
 import { BingoCardContainer, BingoCardTitle } from './BingoCard.style'
 import { BingoGridLayoutContainer } from './BingoGrid.style'
+import BingoCardIconMenu from './BingoCardIconMenu'
+import { Disabled } from './ThemeProvider'
 
 export type BingoCardProps = {
    board?: BingoBoard
@@ -41,6 +43,9 @@ export default function BingoCard() {
                <h1>no board 😭</h1>
             )}
          </BingoGridLayoutContainer>
+         <Disabled state={!isCardHidden}>
+            <BingoCardIconMenu/>
+         </Disabled>
       </BingoCardContainer>
    )
 

@@ -5,14 +5,8 @@ import colors from './colors'
  * General styling for the entire app.
  */
 export const GlobalStyle = createGlobalStyle`
-   :root {
-      --primary: ${colors.PRIMARY};
-      --secondary: ${colors.SECONDARY};
-      --secondary-darkened: ${colors.SECONDARY_DARKENED};
-   }
 
    body {
-      background-color: var(--primary);
       padding: 0;
       margin: 0;
 
@@ -24,6 +18,11 @@ export const GlobalStyle = createGlobalStyle`
    body, h1, h2, h3, p, a, button, input, label {
       color: var(--secondary);
       font-family: 'Nunito';
+   }
+
+   body {
+      color: ${colors.SECONDARY}; // colors.SECONDARY
+      background-color: ${colors.PRIMARY}; // colors.PRIMARY_DARKENED
    }
 `
 

@@ -16,7 +16,7 @@ export default function BingoGrid(props: BingoGridProps) {
       <BingoGridLayout size={size}>
       {
          arrays.range(size*size, 0).map(i => {
-            const cell = items?.[i] ?? {index: i}
+            const cell = items.find(item => item?.index == i) ?? {index: i, name: ''}
             return (
                <Cell {...cell} key={uniqueKey()} />
             )

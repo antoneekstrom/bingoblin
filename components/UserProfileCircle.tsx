@@ -1,10 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BingoPlayer } from '../common/model/bingo'
+import MaterialIcon from './MaterialIcon'
 import { props } from './style'
 import { Label } from './style/typography'
 
-export type UserProfileCircleProps = Pick<BingoPlayer, 'name' | 'color' | 'imgUrl'>
+export type UserProfileCircleProps = Pick<BingoPlayer, 'name' | 'color' | 'imgUrl' | 'role'>
 
 type ProfileImageStyle = {
    url: string
@@ -36,11 +37,11 @@ export const Name = styled(Label)`
    white-space: normal;
 `
 
-export default function UserProfileCircle({ name, color, imgUrl }: UserProfileCircleProps) {
+export default function UserProfileCircle({ name, color, imgUrl, role }: UserProfileCircleProps) {
    return (
       <Container>
          <ProfileImage url={imgUrl ?? 'goblin.png'} color={color} />
-         <Name style={{color}}>{name}</Name>
+         <Name style={{color}}>{role == 'owner' && <MaterialIcon marginSides="2px" size={16}>shield</MaterialIcon>}{name}</Name>
       </Container>
    )
 }

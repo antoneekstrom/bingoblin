@@ -44,7 +44,7 @@ export default class MyDocument extends Document {
                   rel="stylesheet"
                />
                <link
-                  href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+                  href="https://fonts.googleapis.com/icon?family=Material+Icons+Round"
                   rel="stylesheet"
                />
                <link rel="icon" href="/icon.png" />

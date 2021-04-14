@@ -4,7 +4,7 @@
  * 
  */
 import styled, { css } from "styled-components"
-import { props, propsIf } from "."
+import { color, props, propsIf } from "."
 
 /**
  * 
@@ -49,6 +49,8 @@ export type Side = {
  * Flexbox container.
  */
 export const Flex = styled.div<Align & Justify & Direction & Expand & Gap>`
+   color: ${color('neutral', 'text')};
+
    ${propsIf('expand', () => css`
       height: 100%;
       width: 100%;

@@ -54,7 +54,7 @@ export default function BingoBoardSettings({}: BingoBoardSettingsProps) {
       console.log(f)
       if (state && f) {
          const t = (JSON.parse(await f.text()) as BingoBoard)
-         t.items = shuffle(t.items).map((item, index) => ({...item, index} as BingoCell))
+         t.items = shuffle(t.items).map((item, i) => ({...item, index: item.index ?? i} as BingoCell))
          bingo?.requestStateUpdate(
             new FrontendBingoModel(t, state.players)
                .getState()

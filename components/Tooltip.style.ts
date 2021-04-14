@@ -8,8 +8,8 @@ export const Tooltip = styled.div`
 
    position: absolute;
    z-index: 2;
-   bottom: 90%;
-   left: 80%;
+   top: -0.5em;
+   left: calc(100% + 0.5em);
 
    width: 15em;
    height: 7.5em;
