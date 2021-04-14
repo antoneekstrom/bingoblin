@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components'
-import colors from './style/colors'
-import { propsIf } from './style/index'
+import { color, propsIf } from './style/index'
 
 /**
  * 
@@ -27,7 +26,8 @@ export const BingoContainer = styled.div`
  * Adds a background and positions the card absolutely.
  */
 export const BingoCardContainer = styled.div<BingoCardStyle>`
-   background-color: var(--secondary);
+   color: ${color('neutral', 'text')};
+   background-color: ${color('neutral', 'background')};
    border-radius: 3em 3em 0 0;
 
    display: flex;
@@ -62,7 +62,7 @@ export const BingoCardContainer = styled.div<BingoCardStyle>`
  */
 export const BingoCardTitle = styled.h1`
    text-transform: uppercase;
-   color: ${colors.PRIMARY};
+   color: inherit;
    font-family: 'Raleway';
    font-weight: 900;
    font-size: 36px;

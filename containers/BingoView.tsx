@@ -9,7 +9,7 @@ import { BingoContainer } from '../components/BingoCard.style'
 import useBingoCode from '../hooks/useBingoCode'
 import { ClientSocketEmitterWrapper } from '../common/SocketEmitterWrapper'
 import { BingoState } from '../common/model/bingo'
-import DefaultThemeProvider, { Disabled } from '../components/ThemeProvider'
+import DefaultThemeProvider, { Disabled, NeutralThemeProvider, SECONDARY_PALETTE } from '../components/ThemeProvider'
 
 export default function BingoView() {
    const [bingoCode, setBingoCode] = useBingoCode('bongo')
@@ -35,7 +35,9 @@ export default function BingoView() {
                   <Disabled state={!isCardHidden}>
                      <BingoMenu />
                   </Disabled>
-                  <BingoCard />
+                  <NeutralThemeProvider palette={SECONDARY_PALETTE}>
+                     <BingoCard />
+                  </NeutralThemeProvider>
                </BingoContainer>
                <Sidebar />
             </BingoPage>
