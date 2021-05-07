@@ -13,12 +13,17 @@ export type BingoContext = {
    bingoCodeState: [
       code: string,
       setBingoCode: React.Dispatch<React.SetStateAction<string>>
-   ]
+   ],
+   isEditingState: [
+      isEditing: boolean,
+      setIsEditing: React.Dispatch<React.SetStateAction<boolean>>
+   ],
 }
 
 const bingoContext = React.createContext<BingoContext>({
    bingoCodeState: ['NO_CONTEXT', () => console.log("NO_CONTEXT")],
-   isCardHiddenState: [true, () => console.log("NO_CONTEXT")]
+   isCardHiddenState: [true, () => console.log("NO_CONTEXT")],
+   isEditingState: [false, () => console.log("NO_CONTEXT")],
 })
 
 bingoContext.displayName = 'BingoContext'

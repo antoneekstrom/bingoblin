@@ -15,6 +15,7 @@ export const Icon = styled.span<MaterialIconStyle>`
    &.md-${props('size') ?? 18} {
       font-size: ${props('size') ?? 18}px;
    }
+   user-select: none;
 `
 
 export default function MaterialIcon(props: MaterialIconProps) {

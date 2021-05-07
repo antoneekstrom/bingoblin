@@ -1,35 +1,35 @@
 import styled, { css } from 'styled-components'
-import colors from './style/colors'
 import { props } from './style/index'
 
 /**
  * 
  */
-export type BingoGridStyle = {
+export type BingoGridStyleProps = {
    size: number
 }
 
 /**
  * 
  */
-export type BingoGridCellStyle = {
+export type BingoCellStyleProps = {
    color: string
    textColor?: string
-   selfColor?: string
-   clickable?: boolean
+   borderColor?: string
+   isClickable?: boolean
+   forceBorderColor?: boolean
 }
 
 /**
  * 
  */
-export type BingoGridCellLabelStyle = {
+export type BingoGridCellLabelStyleProps = {
    gridSize?: number
 }
 
 /**
  * 
  */
-export const BingoGridLayoutContainer = styled.div`
+export const BingoGridLayoutContainerStyle = styled.div`
    position: relative;
    width: 100%;
    box-sizing: border-box;
@@ -44,7 +44,7 @@ export const BingoGridLayoutContainer = styled.div`
 /**
  * 
  */
-export const BingoGridLayout = styled.ol<BingoGridStyle>`
+export const BingoGridLayoutStyle = styled.ol<BingoGridStyleProps>`
    list-style-type: none;
    margin: 0;
    padding: 0;
@@ -67,7 +67,7 @@ export const BingoGridLayout = styled.ol<BingoGridStyle>`
 /**
  * 
  */
-export const BingoGridCell = styled.li<BingoGridCellStyle>`
+export const BingoCellStyle = styled.li<BingoCellStyleProps>`
    background-color: ${props('color')};
    border-radius: 20%;
    color: ${props('textColor')};
@@ -83,35 +83,59 @@ export const BingoGridCell = styled.li<BingoGridCellStyle>`
    border-color: transparent;
 
    user-select: none;
-   cursor: ${({ clickable }) => (clickable ? 'pointer' : 'unset')};
+   cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'unset')};
 
-   ${({ clickable, selfColor, color }) =>
-      clickable &&
+   ${({ isClickable, borderColor }) =>
+      isClickable &&
       css`
          &:hover,
          &:active,
          &:focus {
-            border-color: ${color == selfColor ? colors.PRIMARY : selfColor};
+            border-color: ${borderColor};
          }
       `}
+
+   ${({ forceBorderColor, borderColor }) => forceBorderColor && css`border-color: ${borderColor};`}
 `
 
 /**
  * 
  */
-export const BingoGridCellLabel = styled.p<BingoGridCellLabelStyle>`
+export const EditableBingoCellStyle = styled(BingoCellStyle)<BingoCellStyleProps>`
+   // cursor: text;
+`
+
+/**
+ * 
+ */
+export const BingoCellLabelStyle = styled.p<BingoGridCellLabelStyleProps>`
    font-family: 'Nunito';
    font-weight: 700;
    color: inherit;
    text-transform: 'capitalize';
    text-align: center;
    text-overflow: ellipsis;
+   outline: none;
    
    margin: 0;
+   box-sizing: border-box;
+
+   width: 100%;
+   height: 100%;
+   
+   word-wrap: break-word;
+
+   display: grid;
+   place-items: center;
 
    ${props('gridSize', getCellLabelFontSize)}
 `
 
+/**
+ * 
+ * @param gridSize 
+ * @returns 
+ */
 function getCellLabelFontSize(gridSize = 0) {
    if ((gridSize) < 5) {
       return 'font-size: 16px;'

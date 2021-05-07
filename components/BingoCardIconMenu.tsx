@@ -57,13 +57,14 @@ export default function BingoCardIconMenu({}: BingoCardIconMenuProps) {
    const {
       state,
       bingoCodeState: [bingoCode],
+      isEditingState: [, setIsEditing]
    } = useBingoContext()
 
    return (
       <NeutralThemeProvider palette={PRIMARY_PALETTE}>
          <List as="ul" direction="column" gap="1rem">
             <MenuIcon as="li" gap="0.3rem">
-               <MaterialIcon>edit</MaterialIcon>
+               <MaterialIcon onClick={toggleIsEditing}>edit</MaterialIcon>
                <Label as="span" className="label">Edit</Label>
             </MenuIcon>
             <MenuIcon as="li" gap="0.3rem">
@@ -73,6 +74,10 @@ export default function BingoCardIconMenu({}: BingoCardIconMenuProps) {
          </List>
       </NeutralThemeProvider>
    )
+
+   function toggleIsEditing() {
+      setIsEditing(isEditing => !isEditing)
+   }
 
    function download() {
       const board = { ...state?.board }

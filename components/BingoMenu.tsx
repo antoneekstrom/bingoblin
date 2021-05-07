@@ -7,6 +7,7 @@ import BingoBoardSettings from './BingoBoardSettings'
 import BingoCode from './BingoCode'
 import BingoPalette from './BingoPalette'
 import BingoPlayerList from './BingoPlayerList'
+import ButtonGroup from './ButtonGroup'
 import StatefulTextField from './StatefulTextInput'
 import { Flex } from './style/layout'
 import { Header } from './style/typography'
@@ -48,6 +49,7 @@ export default function BingoMenu() {
 
             <StatefulTextField
                label="Name"
+               placeholder="Enter display name"
                initialValue={self?.name ?? ''}
                onValue={(name) => {
                   name && bingo?.register(name, bingoCode, self)

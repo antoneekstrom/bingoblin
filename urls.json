@@ -1,0 +1,10 @@
+{
+   "client": {
+      "socketUrl": "https://dev.antonekstrom.se",
+      "wsPath": "/ws/"
+   },
+   "server": {
+      "fetchUrl": "https://dev.antonekstrom.se",
+      "profileImagePath": "/cat"
+   }
+}

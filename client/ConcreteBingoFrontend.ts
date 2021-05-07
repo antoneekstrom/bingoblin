@@ -12,6 +12,7 @@ export default class ConcreteBingoFrontend implements BingoFrontend {
    constructor(private socket: ClientEmitter<BingoEventMap>) {}
 
    requestStateUpdate(state: BingoState): void {
+      console.log(state)
       this.emit('request-state-update', state)
    }
 

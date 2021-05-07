@@ -7,8 +7,9 @@ import StorageById from './StorageById'
 import BingoModel from '../../common/BingoModel'
 import express, { Response } from 'express'
 import fetch from 'node-fetch'
+import urls from '../../urls.json'
 
-start(25565)
+start(3001)
 
 function start(port: number) {
    const { io, app } = init(port)
@@ -32,6 +33,9 @@ function start(port: number) {
 
    onRegisterUser.subscribe(
       ({ client, data: { bingoCode, name, current } }) => {
+         if (name.length > 24) {
+            return
+         }
          if (bingoCode) {
             const model = BackendBingoModel.from(storage.getById(bingoCode))
             const pb = BingoPlayerBuilder.default(
@@ -54,9 +58,10 @@ function start(port: number) {
       if (bingoCode) {
          const model = BackendBingoModel.from(storage.getById(bingoCode))
          const id = client.getClientId()
+         const imgUrl = `${new URL(urls.server.profileImagePath, urls.server.fetchUrl).href}?id=${id}`
          const player = model.assignRole(
             BingoPlayerBuilder.spectator(id)
-               .setImageUrl(`http://158.174.76.130:25565/cat?id=${id}`)
+               .setImageUrl(imgUrl)
                .create()
          );
 
@@ -107,7 +112,7 @@ function start(port: number) {
       }
    })
 
-   app.get('/cat', async (req, res) => {
+   app.get(urls.server.profileImagePath, async (req, res) => {
       const id = req.query['id'] as string | unknown
 
       if (typeof(id) != 'string' || id.length == 0) {
@@ -134,7 +139,7 @@ function init(port: number) {
    const io = new Server(httpServer, {
       cors: {
          origin: '*',
-         methods: 'GET,PUT',
+         methods: ['GET', 'PUT'],
       },
    })
    httpServer.listen(port)

@@ -5,6 +5,7 @@ import WithLabel from './WithLabel'
 
 export type TextFieldProps = Omit<React.HTMLProps<HTMLInputElement>, 'as' | 'ref'> & {
    label?: string
+   placeholder?: string
 }
 
 const Input = styled.input`

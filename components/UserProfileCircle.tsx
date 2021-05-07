@@ -34,14 +34,27 @@ const ProfileImage = styled.div<ProfileImageStyle>`
 `
 
 export const Name = styled(Label)`
+   width: 50px;
+   font-size: 14px;
+   margin: 0;
+
+   /* for ellipsis to work */
    white-space: normal;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   display: inline-block;
+
+   /* limit name to 2 lines */
+   display: -webkit-box;
+   -webkit-line-clamp: 2;
+   -webkit-box-orient: vertical;
 `
 
 export default function UserProfileCircle({ name, color, imgUrl, role }: UserProfileCircleProps) {
    return (
       <Container>
          <ProfileImage url={imgUrl ?? 'goblin.png'} color={color} />
-         <Name style={{color}}>{role == 'owner' && <MaterialIcon marginSides="2px" size={16}>shield</MaterialIcon>}{name}</Name>
+         <Name as="p" style={{color}}>{name}</Name>
       </Container>
    )
 }

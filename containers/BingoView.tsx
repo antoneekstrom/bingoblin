@@ -15,6 +15,7 @@ export default function BingoView() {
    const [bingoCode, setBingoCode] = useBingoCode('bongo')
    const [bingo, state, socket] = useBingo(bingoCode)
    const [isCardHidden, setIsCardHidden] = useState(true)
+   const [isEditing, setIsEditing] = useState(false)
 
    if (!socket) {
       return <SocketErrorView />
@@ -59,7 +60,8 @@ export default function BingoView() {
          state,
          self,
          bingoCodeState: [bingoCode, setBingoCode],
-         isCardHiddenState: [isCardHidden, setIsCardHidden]
+         isCardHiddenState: [isCardHidden, setIsCardHidden],
+         isEditingState: [isEditing, setIsEditing]
       }
    }
 }

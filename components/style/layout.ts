@@ -41,6 +41,9 @@ export type Gap = {
    gap?: string
 }
 
+/**
+ * 
+ */
 export type Side = {
    side?: 'left' | 'right'
 }
