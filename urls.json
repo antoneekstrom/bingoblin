@@ -1,10 +1,10 @@
 {
    "client": {
-      "socketUrl": "https://dev.antonekstrom.se",
+      "socketUrl": "https://bingoblin.antonekstrom.se",
       "wsPath": "/ws/"
    },
    "server": {
-      "fetchUrl": "https://dev.antonekstrom.se",
+      "fetchUrl": "https://bingoblin.antonekstrom.se",
       "profileImagePath": "/cat"
    }
 }
