@@ -6,7 +6,7 @@ type Listener = (...args: any[]) => void
 /**
  * 
  */
-export default function useSocket(event: string, listener: Listener, socket: Socket) {
+export default function useSocket(event: string, listener: Listener, socket: typeof Socket) {
 
    useEffect(() => {
       socket.on(event, listener)

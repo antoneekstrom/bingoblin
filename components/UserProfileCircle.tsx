@@ -1,11 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BingoPlayer } from '../common/model/bingo'
-import MaterialIcon from './MaterialIcon'
 import { props } from './style'
 import { Label } from './style/typography'
 
-export type UserProfileCircleProps = Pick<BingoPlayer, 'name' | 'color' | 'imgUrl' | 'role'>
+export type UserProfileCircleProps = Pick<
+   BingoPlayer,
+   'name' | 'color' | 'imgUrl' | 'role'
+>
 
 type ProfileImageStyle = {
    url: string
@@ -22,7 +24,7 @@ const Container = styled.div`
 `
 
 const ProfileImage = styled.div<ProfileImageStyle>`
-   background-image: url("${props('url')}");
+   background-image: url('${props('url')}');
    background-size: cover;
    border-radius: 50px;
    width: 50px;
@@ -50,11 +52,17 @@ export const Name = styled(Label)`
    -webkit-box-orient: vertical;
 `
 
-export default function UserProfileCircle({ name, color, imgUrl, role }: UserProfileCircleProps) {
+export default function UserProfileCircle({
+   name,
+   color,
+   imgUrl,
+}: UserProfileCircleProps) {
    return (
       <Container>
          <ProfileImage url={imgUrl ?? 'goblin.png'} color={color} />
-         <Name as="p" style={{color}}>{name}</Name>
+         <Name as="p" style={{ color }}>
+            {name}
+         </Name>
       </Container>
    )
 }

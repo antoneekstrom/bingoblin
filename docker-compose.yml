@@ -1,6 +1,7 @@
 version: '3'
 services:
    client:
+      image: antonekstrom/bingoblin-client
       build:
          context: .
          dockerfile: client.Dockerfile
@@ -8,6 +9,7 @@ services:
          - 3000:3000
 
    server:
+      image: antonekstrom/bingoblin-server
       build:
          context: .
          dockerfile: server.Dockerfile

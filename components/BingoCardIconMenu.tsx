@@ -80,7 +80,7 @@ export default function BingoCardIconMenu({}: BingoCardIconMenuProps) {
    }
 
    function download() {
-      const board = { ...state?.board }
+      const board = state?.board
       if (board) {
          board.items = board?.items?.filter((item) => item != undefined)
          const fileBlob = new Blob([JSON.stringify(board, null, 4)], {

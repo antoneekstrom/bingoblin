@@ -15,10 +15,12 @@ const Element = styled.div<PageDropzoneStyle>`
    top: 0;
 
    pointer-events: none;
-   ${({isDropping}) => isDropping && css`
-      pointer-events: all;
-      background-color: rgba(0,0,0,0.4);
-   `}
+   ${({ isDropping }) =>
+      isDropping &&
+      css`
+         pointer-events: all;
+         background-color: rgba(0, 0, 0, 0.4);
+      `}
 
    width: 100vw;
    height: 100vh;
@@ -34,7 +36,7 @@ export default function PageDropzone(props: PageDropzoneProps) {
    return (
       <Element
          isDropping={isDropping}
-         onDragOver={e => e.preventDefault()}
+         onDragOver={(e) => e.preventDefault()}
          onDrop={onDrop}
          onDragEnter={() => setIsDropping(true)}
          onDragExit={() => setIsDropping(false)}
@@ -49,8 +51,7 @@ export default function PageDropzone(props: PageDropzoneProps) {
       setIsDropping(false)
    }
 
-   
-   function onWindowDragEnter(e: DragEvent) {
+   function onWindowDragEnter() {
       setIsDropping(true)
    }
 }
